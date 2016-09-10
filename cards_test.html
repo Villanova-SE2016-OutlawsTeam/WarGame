@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cards Test</title>
+</head>
+<body>
+
+<style>
+    img {
+        width: 10%
+        height: 10;
+        min-width: 10%;
+        min-height: 10%;
+        
+/*        margin: 5px 5px 5px 2px;
+        border-style: solid;
+        border-color: black;
+        border-width: 5px;*/
+        
+        border-radius: 10px;
+        --webkit-border-radius: 10px;
+    }
+
+    table {
+            border-collapse: collapse;
+            border-spacing: 0;
+    }
+
+    tr {
+        font-size: 150%;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: -10%;
+    }
+
+</style>
+
+<div id="content"></div>
+
+
+<script>
+    values = ["ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "jack", "queen", "king"]
+    suits= ["clubs", "diamonds", "hearts", "spades"]
+
+    s=0;
+    v=0;
+
+    image_set = []
+
+    for (s = 0; s < suits.length; s++) {
+        image_row = []
+        for (v = 0; v < values.length; v++) {        
+            card_name = suits[s] + "_" + values[v]
+            img_tag = "<img src='card_images/" + card_name + ".png' />"
+            image_row.push(img_tag)
+        }
+        image_set.push(image_row)
+    }
+
+    image_row = []
+    image_row.push("<img src='card_images/joker1.png' />")
+    image_row.push("<img src='card_images/joker2.png' />")
+    image_row.push("<img src='card_images/backface.png' />")
+
+    image_set.push(image_row)
+
+    row = 0
+    col = 0
+    html=""
+    html += "<table>"
+
+    for (row = 0; row < image_set.length; row++) {
+        thisRow = image_set[row]
+        
+        html += "<tr>"
+        html += "<td></td>"
+        for (col = 0; col < thisRow.length; col++)  {
+            html += "<td>" + col + "</td>"
+        }
+        html += "</tr>"
+
+        html += "<tr>"
+        html += "<td>" + row + "</td>"
+        for (col = 0; col < thisRow.length; col++)  {
+            html += "<td>" + thisRow[col] + "</td>"
+        }
+        html += "</tr>"        
+    }
+
+    html += "</table>"
+
+    document.getElementById("content").innerHTML = html
+
+</script>
+    
+</body>
+</html>
