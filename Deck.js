@@ -1,17 +1,32 @@
+//Singleton just for card info that is shared
+var CardInfo = function() {
+    var names = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king","ace"]
+    var values = [2,3,4,5,6,7,8,9,10,11, 12, 13, 14]
+    var suits = ["clubs", "diamonds", "hearts", "spades"]
+    
+    return {
+        names: names,
+        values: values,
+        suits: suits        
+    }
+}();
+
 //Card Class
-var Card = function(value, name, suit) {
+var Card = function(id, value, name, suit) {
+    var id = id;
     var value = value;
     var name = name;
     var suit = suit;
     
     function print() {
-        console.log("[Card: "+ name +" of " + suit +", value: "+ value +"]");
+        console.log("[Card: "+ name +" of " + suit +", value: "+ value +", id: "+ id +"]");
     }
     
     return {
         value: value,
         name: name,
         suit: suit,
+        id: id,
         print: print
     }   
 }
@@ -23,9 +38,9 @@ var Card = function(value, name, suit) {
 var Deck = function() {
     
     //The member variables
-    names = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king","ace"]
-    values = [2,3,4,5,6,7,8,9,10,11, 12, 13, 14]
-    suits= ["clubs", "diamonds", "hearts", "spades"]
+    names = CardInfo.names
+    values = CardInfo.values
+    suits= CardInfo.suits
     var cardArray = []    
             
     //class functions (need to be variables)
@@ -37,7 +52,8 @@ var Deck = function() {
                 value = values[v];
                 name = names[v];
                 suit = suits[s];
-                card = new Card(value, name, suit);
+                id = suit + "_" + name;
+                card = new Card(id, value, name, suit);
                 cardArray.push(card)
             }
         }        
@@ -98,6 +114,11 @@ var Deck = function() {
         }
     }
     
+    //return card from end of array (top of deck)
+    function pop() {
+        return cardArray.pop();
+    }
+    
     //how to expose class functions to
     //left value is the name of the fuction
     //right value is the name that is exposed, so it can be called  
@@ -106,18 +127,23 @@ var Deck = function() {
         count: count,
         print: print,
         shuffle: shuffle,
-        shuffle_N_Times: shuffle_N_Times
+        shuffle_N_Times: shuffle_N_Times,
+        pop: pop
     };
 }
 
+
 //Basic tests of class
 
-//d = Deck();
-//d.create_deck();
+d = Deck();
+d.create_deck();
 //d.print();
+c = d.pop()
+console.log(c.id)
+
+
 //
-//
-//d.shuffle_N_Times(10);
+//d.shuffle_N_Times(5);
 //d.print();
 
 
