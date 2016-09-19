@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Deck Test</title>
+</head>
+<style>
+    h1 {
+        text-align: left;
+    }        
+
+    button {
+        width: 100px;
+        height: 50px;
+        margin-right: 20px;
+    }
+
+    img {
+        width: 8vw;
+        height: auto;
+    }
+
+</style>
+<body>
+
+<h1>Test Displaying Deck</h1>
+<h1 id="banner"></h1>
+<p></p>
+
+<button onclick="next_card()">Show Next Card</button>
+<button onclick="shuffle_deck()">Shuffle Deck</button>
+
+<div id="card_space"></div>
+
+</body>
+</html>
+
+<script src="Deck.js"></script>
+<script>
+    image_dir="card_images/"
+    card_space_element = document.getElementById("card_space")
+    var deck;   //placeholder for this scope.
+    
+    reset();   
+
+    function reset() {
+        deck = new Deck();
+        deck.create_deck();
+        times_shuffled = 0;
+        update_banner();
+        card_space_element.innerHTML = ""
+    }    
+
+    function update_banner() {
+        mystr = deck.count() + " cards left in the deck.  "
+        mystr += "Deck shuffled " + times_shuffled + " times";
+        document.getElementById("banner").innerHTML = mystr
+    }  
+
+    function next_card() {
+        if (deck.count() == 0) {
+            reset();
+        }        
+
+        card = deck.pop()
+        card.print()
+        card_img_file = image_dir + card.id + ".png"
+        tag = "<img src='" + card_img_file + "' />"
+        console.log(tag)
+        card_space_element.innerHTML += tag
+        update_banner();
+    }
+
+    function shuffle_deck() {
+        if (deck.count() == 0) {
+            reset();
+        }        
+
+        deck.shuffle();
+        times_shuffled += 1;
+        update_banner();
+    }
+
+
+</script>
