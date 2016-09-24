@@ -11,10 +11,10 @@
 <table>
     <tr>
         <td>
-            <img onclick="cardClick(1)" src="card_images/backface.png">
+            <img onclick="cardClick('player1')" src="card_images/backface.png">
         </td>
         <td>
-            <img onclick="cardClick(2)" src="card_images/backface.png">
+            <img onclick="cardClick('player2')" src="card_images/backface.png">
         </td>
     </tr>
 
@@ -56,22 +56,22 @@ function cardClick(playerNumber){
 
     var imageTag = ""
     var image_dir="card_images/"
-    if(playerNumber == 1){
+    
+    if(playerNumber == PlayerInfo.PLAYER1){
         var card = p1.active_deck.pop()
         if(card){
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("player1").innerHTML = imageTag
+            document.getElementById(PlayerInfo.PLAYER1).innerHTML = imageTag
         }
-    }else{
+    } else {
         var card = p2.active_deck.pop()
         if(card){
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("player2").innerHTML = imageTag
+            document.getElementById(PlayerInfo.PLAYER2).innerHTML = imageTag
         }
     }
-
 }
 
 
