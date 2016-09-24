@@ -9,7 +9,7 @@ var CardInfo = function() {
         values: values,
         suits: suits        
     }
-}();
+}(); //() means executing the function. Never instantiate it - singleton
 
 //Card Class
 var Card = function(id, value, name, suit) {
@@ -22,7 +22,7 @@ var Card = function(id, value, name, suit) {
         console.log("[Card: "+ name +" of " + suit +", value: "+ value +", id: "+ id +"]");
     }
     
-    return {
+    return {            //return statement makes the class attributes(inner variables) accessible. Returns a dictionary
         value: value,
         name: name,
         suit: suit,
@@ -35,7 +35,7 @@ var Card = function(id, value, name, suit) {
 //This is an example of how to simulate
 //object-oriented programming in javascript
 
-var Deck = function() {
+var Deck = function() {     //Deck objects - an array of Card objects
     
     //The member variables
     names = CardInfo.names
@@ -118,6 +118,10 @@ var Deck = function() {
     function pop() {
         return cardArray.pop();
     }
+
+    function add(card) {
+        cardArray.push(card)
+    }
     
     //how to expose class functions to
     //left value is the name of the fuction
@@ -128,22 +132,86 @@ var Deck = function() {
         print: print,
         shuffle: shuffle,
         shuffle_N_Times: shuffle_N_Times,
-        pop: pop
+        pop: pop,
+        add: add
     };
 }
 
+// General player information
+var PlayerInfo = function() {
+    var HUMAN = "human"
+    var COMPUTER = "computer"
+    var PLAYER1 = "player1"
+    var PLAYER2 = "player2"
+    
+    return {
+        HUMAN: HUMAN,
+        COMPUTER: COMPUTER,
+        PLAYER1: PLAYER1,
+        PLAYER2: PLAYER2
+    }
+}();
 
+// Player class -- specific player
+var Player = function(type, id) {
+    var id = id
+    var type = type
+
+    var active_deck = new Deck()
+    var discarded_deck = new Deck()
+
+    function print() {
+        console.log("id: " + id + ", type: " + type)
+    }
+
+    // function add_card(card) {
+
+    // }
+        
+    return {
+        id: id,
+        type: type,
+        print: print,
+        active_deck: active_deck,
+        discarded_deck: discarded_deck
+    }
+}
 //Basic tests of class
 
 d = Deck();
 d.create_deck();
 //d.print();
 c = d.pop()
-console.log(c.id)
+c.print();
+//console.log(c.id)
+// console.log(PlayerInfo.types)
+p1 = new Player(PlayerInfo.HUMAN, PlayerInfo.PLAYER1)
+p2 = new Player(PlayerInfo.COMPUTER, PlayerInfo.PLAYER2)
 
+starting_deck = new Deck()
+starting_deck.create_deck()
+starting_deck.shuffle()
 
-//
-//d.shuffle_N_Times(5);
-//d.print();
+// starting_deck.print()
+
+console.log(starting_deck.count())
+var deck_count = starting_deck.count()
+
+for (var i = 0; i < deck_count; i++) {
+    card = starting_deck.pop()
+    
+    if (i % 2 == 0) {
+        p1.active_deck.add(card)
+    } else {
+        p2.active_deck.add(card)
+    }
+}
+
+p1.active_deck.print()
+p1.discarded_deck.print()
+
+p2.active_deck.print()
+p2.discarded_deck.print()
+
 
 

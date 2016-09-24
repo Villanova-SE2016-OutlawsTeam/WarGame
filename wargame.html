@@ -6,28 +6,77 @@
 </head>
 <body>
 
-<style>
-    img {
-        background: url(cards.png) 100px 100px;
-
-    }
-</style>
-
 <h1>War Game</h1>
-<h2>by Team Outlaws</h2>
-<ul>    
-    <li>Deviarchana Ray (Ruby) <strong>Team Leader</strong></li> 
-    <li>Andrew Grace</li>
-    <li>Henri Hila</li>    
-    <li>Johanna Warren</li>
-  <li>learning GitHub</li>
-    <li>Henri absent</li>    
-   
 
-</ul>
+<table>
+    <tr>
+        <td>
+            <img onclick="cardClick(1)" src="card_images/backface.png">
+        </td>
+        <td>
+            <img onclick="cardClick(2)" src="card_images/backface.png">
+        </td>
+    </tr>
 
-<img src="cards.png">
+    <tr>
+        <td id="player1">
+            
+        </td>
+        <td id="player2">
+            
+        </td>
+    </tr>    
 
+</table>
+
+<script src="Deck.js"></script>
+<script type="text/javascript">
+
+p1 = new Player(PlayerInfo.HUMAN, PlayerInfo.PLAYER1)
+p2 = new Player(PlayerInfo.COMPUTER, PlayerInfo.PLAYER2)
+
+starting_deck = new Deck()
+starting_deck.create_deck()
+starting_deck.shuffle()
+
+console.log(starting_deck.count())
+var deck_count = starting_deck.count()
+
+for (var i = 0; i < deck_count; i++) {
+    card = starting_deck.pop()
+
+    if (i % 2 == 0) {
+        p1.active_deck.add(card)
+    } else {
+        p2.active_deck.add(card)
+    }
+}
+
+function cardClick(playerNumber){
+
+    var imageTag = ""
+    var image_dir="card_images/"
+    if(playerNumber == 1){
+        var card = p1.active_deck.pop()
+        if(card){
+            var card_img_file = image_dir + card.id + ".png"
+            var imageTag = "<img src='" + card_img_file + "' />"
+            document.getElementById("player1").innerHTML = imageTag
+        }
+    }else{
+        var card = p2.active_deck.pop()
+        if(card){
+            var card_img_file = image_dir + card.id + ".png"
+            var imageTag = "<img src='" + card_img_file + "' />"
+            document.getElementById("player2").innerHTML = imageTag
+        }
+    }
+
+}
+
+
+
+</script>
 
 </body>
 </html>
