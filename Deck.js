@@ -176,36 +176,3 @@ var Player = function(type, id) {
         discarded_deck: discarded_deck
     }
 }
-//Basic tests of class
-
-// console.log(PlayerInfo.types)
-p1 = new Player(PlayerInfo.HUMAN, PlayerInfo.PLAYER1)
-p2 = new Player(PlayerInfo.COMPUTER, PlayerInfo.PLAYER2)
-
-starting_deck = new Deck()
-starting_deck.create_deck()
-starting_deck.shuffle()
-
-// starting_deck.print()
-
-console.log(starting_deck.count())
-var deck_count = starting_deck.count()
-
-for (var i = 0; i < deck_count; i++) {
-    card = starting_deck.pop()
-    
-    if (i % 2 == 0) {
-        p1.active_deck.add(card)
-    } else {
-        p2.active_deck.add(card)
-    }
-}
-
-p1.active_deck.print()
-p1.discarded_deck.print()
-
-p2.active_deck.print()
-p2.discarded_deck.print()
-
-
-
