@@ -9,7 +9,7 @@ var CardInfo = function() {
         values: values,
         suits: suits        
     }
-}();
+}(); //() means executing the function. Never instantiate it - singleton
 
 //Card Class
 var Card = function(id, value, name, suit) {
@@ -22,7 +22,7 @@ var Card = function(id, value, name, suit) {
         console.log("[Card: "+ name +" of " + suit +", value: "+ value +", id: "+ id +"]");
     }
     
-    return {
+    return {            //return statement makes the class attributes(inner variables) accessible. Returns a dictionary
         value: value,
         name: name,
         suit: suit,
@@ -35,7 +35,7 @@ var Card = function(id, value, name, suit) {
 //This is an example of how to simulate
 //object-oriented programming in javascript
 
-var Deck = function() {
+var Deck = function() {     //Deck objects - an array of Card objects
     
     //The member variables
     names = CardInfo.names
@@ -139,7 +139,8 @@ d = Deck();
 d.create_deck();
 //d.print();
 c = d.pop()
-console.log(c.id)
+c.print();
+//console.log(c.id)
 
 
 //
