@@ -47,8 +47,7 @@ function cardClick(playerNumber){
 
     var imageTag = ""
     var image_dir="card_images/"
-	
-    if(playerNumber == PlayerInfo.PLAYER1){
+    if(playerNumber == 1){
         var card = p1.active_deck.pop()
 		p1_activeCard = card
         if(card){
@@ -79,7 +78,7 @@ function cardClick(playerNumber){
 		<th colspan=2 align="right">Player 2</th>
 	</tr>
     <tr>
-        <td id="player1" width='170px' rowspan='2' align = "left" onclick="cardClick('player1')">
+        <td id="player1" width='170px' rowspan='2' align = "left" onclick="cardClick(1)">
         </td>
 		
 		<td id="battlefield1" width ='345px' align = "right">            
@@ -96,7 +95,7 @@ function cardClick(playerNumber){
 		<td id="battlefield2" width ='345px' align = "left">            
         </td>
 		
-        <td id="player2" width='170px' rowspan='2' align = "right" onclick="cardClick('player2')">
+        <td id="player2" width='170px' rowspan='2' align = "right" onclick="cardClick(2)">
         </td>
     </tr>   
 
