@@ -3,38 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>War Game</title>
-	
-<style>
-table {
-	width: 1280px;
-}
-
-.col1 {
-	width: 13%
-	text-align: left;
-}
-
-.col2 {
-	width: 35%;
-	text-align: right;
-}
-
-.col3 {
-	width: 4%;
-	text-align: center;
-}
-
-.col4 {
-	width: 35%;
-	text-align: left;
-}
-
-.col5 {
-	width: 13%;
-	text-align: right;
-}
-
-</style>	
 </head>
 <body>
 
@@ -104,20 +72,20 @@ function cardClick(playerNumber){
 <!-- Render War Game main component --> 
 <h1>War Game</h1>
 <div id='war_game'>
-<table>
+<table style="width:1280px">
 	<tr>
 		<th colspan=2 align="left">Player 1</th>
 		<th align="center"></th>
 		<th colspan=2 align="right">Player 2</th>
 	</tr>
     <tr>
-        <td id="player1" class="col1" onclick="cardClick('player1')">
+        <td id="player1" width='170px' rowspan='2' align = "left" onclick="cardClick('player1')">
         </td>
 		
-		<td id="battlefield1" class="col2">            
+		<td id="battlefield1" width ='345px' align = "right">            
         </td>
 		
-		<td id="nomansland" class="col3">
+		<td id="nomansland" width='50px'>
 			<!-- Deal cards and remove start button on click -->
 			<div id="start">
 				<img onclick="this.parentNode.remove();dealDeck()" src="other_images/StartButton.png">
@@ -125,10 +93,10 @@ function cardClick(playerNumber){
 		</td>
 		
 		<td 
-		<td id="battlefield2" class="col4">            
+		<td id="battlefield2" width ='345px' align = "left">            
         </td>
 		
-        <td id="player2" class="col5" onclick="cardClick('player2')">
+        <td id="player2" width='170px' rowspan='2' align = "right" onclick="cardClick('player2')">
         </td>
     </tr>   
 
