@@ -6,50 +6,41 @@
 </head>
 <body>
 
-<h1>War Game</h1>
-
-<table>
-    <tr>
-        <td>
-            <img onclick="cardClick(1)" src="card_images/backface.png">
-        </td>
-        <td>
-            <img onclick="cardClick(2)" src="card_images/backface.png">
-        </td>
-    </tr>
-
-    <tr>
-        <td id="player1">
-            
-        </td>
-        <td id="player2">
-            
-        </td>
-    </tr>    
-
-</table>
-
 <script src="Deck.js"></script>
+<script src="player.js"></script>
 <script type="text/javascript">
+var imageTag = ""
+var image_dir="card_images/"
 
+// Create 2 players
 p1 = new Player(PlayerInfo.HUMAN, PlayerInfo.PLAYER1)
 p2 = new Player(PlayerInfo.COMPUTER, PlayerInfo.PLAYER2)
 
-starting_deck = new Deck()
-starting_deck.create_deck()
-starting_deck.shuffle()
+var p1_activeCard;
+var p2_activeCard;
 
-console.log(starting_deck.count())
-var deck_count = starting_deck.count()
+function dealDeck() {
+	starting_deck = new Deck()
+	starting_deck.create_deck()
+	starting_deck.shuffle()
 
-for (var i = 0; i < deck_count; i++) {
-    card = starting_deck.pop()
+	var deck_count = starting_deck.count()
 
-    if (i % 2 == 0) {
-        p1.active_deck.add(card)
-    } else {
-        p2.active_deck.add(card)
-    }
+	for (var i = 0; i < deck_count; i++) {
+		card = starting_deck.pop()
+
+		if (i % 2 == 0) {
+			p1.active_deck.add(card)
+			var card_img_file = image_dir + "backface" + ".png"
+			var imageTag = "<img src='" + card_img_file + "' />"
+			document.getElementById("player1").innerHTML = imageTag
+		} else {
+			p2.active_deck.add(card)
+			var card_img_file = image_dir + "backface" + ".png"
+			var imageTag = "<img src='" + card_img_file + "' />"
+			document.getElementById("player2").innerHTML = imageTag
+		}
+	}
 }
 
 function cardClick(playerNumber){
@@ -58,25 +49,57 @@ function cardClick(playerNumber){
     var image_dir="card_images/"
     if(playerNumber == 1){
         var card = p1.active_deck.pop()
+		p1_activeCard = card
         if(card){
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("player1").innerHTML = imageTag
+            document.getElementById("battlefield1").innerHTML = imageTag
         }
     }else{
         var card = p2.active_deck.pop()
+		p1_activeCard = card
         if(card){
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("player2").innerHTML = imageTag
+            document.getElementById("battlefield2").innerHTML = imageTag
         }
     }
-
 }
-
-
 
 </script>
 
+<!-- Render War Game main component --> 
+<h1>War Game</h1>
+<div id='war_game'>
+<table style="width:1280px">
+	<tr>
+		<th colspan=2 align="left">Player 1</th>
+		<th align="center"></th>
+		<th colspan=2 align="right">Player 2</th>
+	</tr>
+    <tr>
+        <td id="player1" width='170px' rowspan='2' align = "left" onclick="cardClick(1)">
+        </td>
+		
+		<td id="battlefield1" width ='345px' align = "right">            
+        </td>
+		
+		<td id="nomansland" width='50px'>
+			<!-- Deal cards and remove start button on click -->
+			<div id="start">
+				<img onclick="this.parentNode.remove();dealDeck()" src="other_images/StartButton.png">
+			</div>
+		</td>
+		
+		<td 
+		<td id="battlefield2" width ='345px' align = "left">            
+        </td>
+		
+        <td id="player2" width='170px' rowspan='2' align = "right" onclick="cardClick(2)">
+        </td>
+    </tr>   
+
+</table>
+</div>
 </body>
 </html>
