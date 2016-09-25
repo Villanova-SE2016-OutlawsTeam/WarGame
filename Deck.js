@@ -113,6 +113,7 @@ var Deck = function() {     //Deck objects - an array of Card objects
             shuffle();
         }
     }
+	
     
     //return card from end of array (top of deck)
     function pop() {
@@ -136,6 +137,7 @@ var Deck = function() {     //Deck objects - an array of Card objects
         add: add
     };
 }
+<<<<<<< HEAD
 
 // General player information
 var PlayerInfo = function() {
@@ -176,3 +178,5 @@ var Player = function(type, id) {
         discarded_deck: discarded_deck
     }
 }
+=======
+>>>>>>> parent of f6d2518... Revert "Deal deck"
