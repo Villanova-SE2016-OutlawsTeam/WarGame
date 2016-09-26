@@ -3,6 +3,8 @@ h1 {
     font-family: Arial Black, Arial Black, Gadget, sans-serif;
 }
 
+/*This probably should be a relative size because
+this assumes a certain resolution on the monitor*/
 table {
     width: 1280px;
 }
