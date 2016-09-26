@@ -2,27 +2,27 @@ table {
     width: 1280px;
 }
 
-.col1 {
+td.col1 {
     width: 13%
     text-align: left;
 }
 
-.col2 {
+td.col2 {
     width: 35%;
     text-align: right;
 }
 
-.col3 {
+td.col3 {
     width: 4%;
     text-align: center;
 }
 
-.col4 {
+td.col4 {
     width: 35%;
     text-align: left;
 }
 
-.col5 {
+td.col5 {
     width: 13%;
     text-align: right;
 }
