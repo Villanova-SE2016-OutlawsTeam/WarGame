@@ -79,8 +79,8 @@ var imageTag = ""
 var image_dir="card_images/"
 
 // Create 2 players
-p1 = new Player(PlayerInfo.HUMAN, PlayerInfo.PLAYER1)
-p2 = new Player(PlayerInfo.COMPUTER, PlayerInfo.PLAYER2)
+p1 = new Player(GameConstants.HUMAN, GameConstants.PLAYER1)
+p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
 
 var p1_activeCard;
 var p2_activeCard;
@@ -99,12 +99,12 @@ function dealDeck() {
 			p1.active_deck.add(card)
 			var card_img_file = image_dir + "backface" + ".png"
 			var imageTag = "<img src='" + card_img_file + "' />"
-			document.getElementById("player1").innerHTML = imageTag
+			document.getElementById(GameConstants.PLAYER1).innerHTML = imageTag
 		} else {
 			p2.active_deck.add(card)
 			var card_img_file = image_dir + "backface" + ".png"
 			var imageTag = "<img src='" + card_img_file + "' />"
-			document.getElementById("player2").innerHTML = imageTag
+			document.getElementById(GameConstants.PLAYER2).innerHTML = imageTag
 		}
 	}
 }
@@ -114,13 +114,13 @@ function cardClick(playerNumber){
     var imageTag = ""
     var image_dir="card_images/"
 	
-    if(playerNumber == PlayerInfo.PLAYER1){
+    if(playerNumber == GameConstants.PLAYER1){
         var card = p1.active_deck.pop()
 		p1_activeCard = card
         if(card){
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("battlefield1").innerHTML = imageTag
+            document.getElementById(GameConstants.BATTLEFIELD1).innerHTML = imageTag
         }
     }else{
         var card = p2.active_deck.pop()
@@ -128,7 +128,7 @@ function cardClick(playerNumber){
         if(card){
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("battlefield2").innerHTML = imageTag
+            document.getElementById(GameConstants.BATTLEFIELD2).innerHTML = imageTag
         }
     }
 }
