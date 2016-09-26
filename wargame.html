@@ -55,9 +55,6 @@ var image_dir="card_images/"
 p1 = new Player(GameConstants.HUMAN, GameConstants.PLAYER1)
 p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
 
-var p1_activeCard;
-var p2_activeCard;
-
 function dealDeck(event) {
     //removing the wargame image
     event.target.parentNode.remove(); 
@@ -86,23 +83,23 @@ function dealDeck(event) {
 	}
 }
 
-function cardClick(playerNumber){
+function cardClick(playerNumber) {
 
     var imageTag = ""
     var image_dir="card_images/"
 	
-    if(playerNumber == GameConstants.PLAYER1){
+    if (playerNumber == GameConstants.PLAYER1) {
         var card = p1.active_deck.pop()
-		p1_activeCard = card
-        if(card){
+		p1.activeCard = card
+        if (card) {
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
             document.getElementById(GameConstants.BATTLEFIELD1).innerHTML = imageTag
         }
     } else {
         var card = p2.active_deck.pop()
-		p2_activeCard = card
-        if(card){
+		p2.activeCard = card
+        if (card) {
             var card_img_file = image_dir + card.id + ".png"
             var imageTag = "<img src='" + card_img_file + "' />"
             document.getElementById(GameConstants.BATTLEFIELD2).innerHTML = imageTag

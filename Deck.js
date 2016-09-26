@@ -161,6 +161,7 @@ var GameConstants = function() {
 var Player = function(type, id) {
     var id = id
     var type = type
+    var activeCard;
 
     var active_deck = new Deck()
     var discarded_deck = new Deck()
@@ -178,6 +179,7 @@ var Player = function(type, id) {
         type: type,
         print: print,
         active_deck: active_deck,
-        discarded_deck: discarded_deck
+        discarded_deck: discarded_deck,
+        activeCard: activeCard
     }
 }
