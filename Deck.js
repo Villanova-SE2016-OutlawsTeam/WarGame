@@ -9,7 +9,7 @@ var CardInfo = function() {
         values: values,
         suits: suits        
     }
-}();
+}(); //() means executing the function. Never instantiate it - singleton
 
 //Card Class
 var Card = function(id, value, name, suit) {
@@ -22,7 +22,7 @@ var Card = function(id, value, name, suit) {
         console.log("[Card: "+ name +" of " + suit +", value: "+ value +", id: "+ id +"]");
     }
     
-    return {
+    return {            //return statement makes the class attributes(inner variables) accessible. Returns a dictionary
         value: value,
         name: name,
         suit: suit,
@@ -35,7 +35,7 @@ var Card = function(id, value, name, suit) {
 //This is an example of how to simulate
 //object-oriented programming in javascript
 
-var Deck = function() {
+var Deck = function() {     //Deck objects - an array of Card objects
     
     //The member variables
     names = CardInfo.names
@@ -86,21 +86,25 @@ var Deck = function() {
         //if that spot isn't empty, then find next closest spot to
         //put card.
         cardArray.forEach(function(card){
-            low=0;
-            high=highest_index;
+            low = 0;
+            high = highest_index;
             new_index =  Math.floor(Math.random()*(high - low+ 1 )+low); 
             
             if (tempCards[new_index] === null) {
                 tempCards[new_index] = card;
             } else {
-                new_index = (new_index + 1) > highest_index ? 0 : new_index+1;
+                function next_index() {
+                    return (new_index + 1) > highest_index ? 0 : (new_index + 1);
+                }
+
+                new_index = next_index();
                 done = false;
                 do {
-                    if (tempCards[new_index] == null) {
+                    if (tempCards[new_index] === null) {
                         tempCards[new_index] = card;    
                         done = true;
                     } else {
-                        new_index = (new_index + 1) > highest_index ? 0 : new_index+1;                            
+                        new_index = next_index();                            
                     }
                 } while (!done);
             }
@@ -118,6 +122,10 @@ var Deck = function() {
     function pop() {
         return cardArray.pop();
     }
+
+    function add(card) {
+        cardArray.push(card)
+    }
     
     //how to expose class functions to
     //left value is the name of the fuction
@@ -128,22 +136,54 @@ var Deck = function() {
         print: print,
         shuffle: shuffle,
         shuffle_N_Times: shuffle_N_Times,
-        pop: pop
+        pop: pop,
+        add: add
     };
 }
 
+//Constants so we don't use strings directly,
+//and we'll get an error if we mistype this (which is good).
+var GameConstants = function() {
+    var HUMAN = "human"
+    var COMPUTER = "computer"
+    var PLAYER1 = "player1"
+    var PLAYER2 = "player2"
+    var BATTLEFIELD1 = "battlefield1"
+    var BATTLEFIELD2 = "battlefield2"
+    
+    return {
+        HUMAN: HUMAN,
+        COMPUTER: COMPUTER,
+        PLAYER1: PLAYER1,
+        PLAYER2: PLAYER2,
+        BATTLEFIELD1: BATTLEFIELD1,
+        BATTLEFIELD2: BATTLEFIELD2
+    }
+}();
 
-//Basic tests of class
+// Player class -- specific player
+var Player = function(type, id) {
+    var id = id
+    var type = type
+    var activeCard;
 
-d = Deck();
-d.create_deck();
-//d.print();
-c = d.pop()
-console.log(c.id)
+    var active_deck = new Deck()
+    var discarded_deck = new Deck()
 
+    function print() {
+        console.log("id: " + id + ", type: " + type)
+    }
 
-//
-//d.shuffle_N_Times(5);
-//d.print();
+    // function add_card(card) {
 
-
+    // }
+        
+    return {
+        id: id,
+        type: type,
+        print: print,
+        active_deck: active_deck,
+        discarded_deck: discarded_deck,
+        activeCard: activeCard
+    }
+}
