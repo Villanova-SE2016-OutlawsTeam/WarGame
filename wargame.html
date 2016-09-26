@@ -13,29 +13,32 @@
 <div id='war_game'>
 <table>
 	<tr>
-		<th colspan=2 align="left">Player 1</th>
-		<th align="center"></th>
-		<th colspan=2 align="right">Player 2</th>
+		<th colspan=2 class="left">Player 1</th>
+        <th></th>		
+        <th></th>       
+		<th colspan=2 class="right">Player 2</th>
 	</tr>
+
     <tr>
         <td id="player1" class="col1" onclick="cardClick('player1')">
+             <img src="card_images/backface.png" class="backface">
         </td>
 		
-		<td id="battlefield1" class="col2">            
-        </td>
+		<td id="battlefield1" class="col2"></td>
 		
 		<td id="nomansland" class="col3">
 			<!-- Deal cards and remove start button on click -->
 			<div id="start">
-				<img onclick="this.parentNode.remove();dealDeck()" src="other_images/StartButton.png">
+				<img onclick="dealDeck(event)" src="other_images/StartButton.png">
 			</div>
 		</td>
 		
-		<td 
+		<td> 
 		<td id="battlefield2" class="col4">            
         </td>
 		
         <td id="player2" class="col5" onclick="cardClick('player2')">
+            <img src="card_images/backface.png" class="backface">
         </td>
     </tr>   
 
@@ -55,8 +58,18 @@ p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
 var p1_activeCard;
 var p2_activeCard;
 
-function dealDeck() {
-	starting_deck = new Deck()
+function dealDeck(event) {
+    //removing the wargame image
+    event.target.parentNode.remove(); 
+
+    //making the backfaces visible for each player
+    backfaces = document.getElementsByClassName("backface")
+    for (var i = 0; i < backfaces.length; i++) {
+        thisCard = backfaces[i];
+        thisCard.style.visibility = "visible"
+    }
+    
+    starting_deck = new Deck()
 	starting_deck.create_deck()
 	starting_deck.shuffle()
 
@@ -67,14 +80,9 @@ function dealDeck() {
 
 		if (i % 2 == 0) {
 			p1.active_deck.add(card)
-			var card_img_file = image_dir + "backface" + ".png"
-			var imageTag = "<img src='" + card_img_file + "' />"
-			document.getElementById(GameConstants.PLAYER1).innerHTML = imageTag
+
 		} else {
 			p2.active_deck.add(card)
-			var card_img_file = image_dir + "backface" + ".png"
-			var imageTag = "<img src='" + card_img_file + "' />"
-			document.getElementById(GameConstants.PLAYER2).innerHTML = imageTag
 		}
 	}
 }
@@ -92,7 +100,7 @@ function cardClick(playerNumber){
             var imageTag = "<img src='" + card_img_file + "' />"
             document.getElementById(GameConstants.BATTLEFIELD1).innerHTML = imageTag
         }
-    }else{
+    } else {
         var card = p2.active_deck.pop()
 		p2_activeCard = card
         if(card){

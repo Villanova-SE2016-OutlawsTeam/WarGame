@@ -2,6 +2,14 @@ table {
     width: 1280px;
 }
 
+th.left {
+    text-align: left;
+}
+
+th.right {
+    text-align: right;
+}
+
 td.col1 {
     width: 13%
     text-align: left;
@@ -25,4 +33,8 @@ td.col4 {
 td.col5 {
     width: 13%;
     text-align: right;
+}
+
+img.backface {
+    visibility: hidden;
 }
