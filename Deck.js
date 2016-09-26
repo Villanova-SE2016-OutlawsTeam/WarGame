@@ -86,21 +86,25 @@ var Deck = function() {     //Deck objects - an array of Card objects
         //if that spot isn't empty, then find next closest spot to
         //put card.
         cardArray.forEach(function(card){
-            low=0;
-            high=highest_index;
+            low = 0;
+            high = highest_index;
             new_index =  Math.floor(Math.random()*(high - low+ 1 )+low); 
             
             if (tempCards[new_index] === null) {
                 tempCards[new_index] = card;
             } else {
-                new_index = (new_index + 1) > highest_index ? 0 : new_index+1;
+                function next_index() {
+                    return (new_index + 1) > highest_index ? 0 : (new_index + 1);
+                }
+
+                new_index = next_index();
                 done = false;
                 do {
-                    if (tempCards[new_index] == null) {
+                    if (tempCards[new_index] === null) {
                         tempCards[new_index] = card;    
                         done = true;
                     } else {
-                        new_index = (new_index + 1) > highest_index ? 0 : new_index+1;                            
+                        new_index = next_index();                            
                     }
                 } while (!done);
             }
