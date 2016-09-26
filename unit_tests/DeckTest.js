@@ -118,6 +118,6 @@ QUnit.test( "04. Test that the right cards are in the deck.", function( assert )
     }
  
     //id should be a string
-    assert.equal(allEqualToOne, true, "The deck should exactly have one of type of card." );      
+    assert.equal(allEqualToOne, true, "The deck should exactly: cards 2 to ace for each of the 4 suits (52 cards)." );      
 });
 
