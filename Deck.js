@@ -187,3 +187,4 @@ var Player = function(type, id) {
         activeCard: activeCard
     }
 }
+
