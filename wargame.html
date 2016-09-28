@@ -34,9 +34,7 @@
 			</div>
 		</td>
 		
-		<td> 
-		<td id="battlefield2" class="col4">            
-        </td>
+		<td><td id="battlefield2" class="col4"></td>
 		
         <td id="player2" class="col5" onclick="cardClick('player2')">
             <img src="card_images/backface.png" class="backface">
@@ -91,17 +89,15 @@ function cardClick(playerNumber){
     var image_dir="card_images/"
 	var whichPlayer = playerNumber;
 	
-	
-	
-    if(playerNumber == GameConstants.PLAYER1){
+    if (playerNumber == GameConstants.PLAYER1) {
 		
 		if (playerPlayed == GameConstants.PLAYER1){
 			var playerTag = "" + whichPlayer + "'s turn is over" 
 			document.getElementById("whichPlayer").innerHTML = playerTag
 			return false;
-		} else{
+		} else {
 			var card = p1.active_deck.pop()
-			if(card){
+			if (card) {
 				var card_img_file = image_dir + card.id + ".png"
 				var imageTag = "<img src='" + card_img_file + "' />"
 				var playerTag = "" + whichPlayer + " is playing " 
@@ -111,24 +107,24 @@ function cardClick(playerNumber){
 			}
 		   
 		}
-    } else{
+    } else {
 	
 		if (playerPlayed == GameConstants.PLAYER2){
 			var playerTag = "" + whichPlayer + "'s turn is over"  
 			document.getElementById("whichPlayer").innerHTML = playerTag
 			return false;
-		}
-	else{
-        var card = p2.active_deck.pop()
-        if(card){
-            var card_img_file = image_dir + card.id + ".png"
-            var imageTag = "<img src='" + card_img_file + "' />"
-			var playerTag = " " + whichPlayer + " is playing " 
-			document.getElementById("whichPlayer").innerHTML = playerTag
-            document.getElementById(GameConstants.BATTLEFIELD2).innerHTML = imageTag
-			playerPlayed = GameConstants.PLAYER2
-			}
+		} else {
+            var card = p2.active_deck.pop()
+            if (card) {
+                var card_img_file = image_dir + card.id + ".png"
+                var imageTag = "<img src='" + card_img_file + "' />"
+    			var playerTag = " " + whichPlayer + " is playing " 
+    			document.getElementById("whichPlayer").innerHTML = playerTag
+                document.getElementById(GameConstants.BATTLEFIELD2).innerHTML = imageTag
+    			playerPlayed = GameConstants.PLAYER2
+    		}
         }
+
     }
 }
 
