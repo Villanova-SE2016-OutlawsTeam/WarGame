@@ -11,7 +11,7 @@
 <!-- Render War Game main component --> 
 <h1>War Game</h1>
 <div id='war_game'>
-<h1 id="whichPlayer"> </h1>
+<h1 id='playerMessage'> </h1>
 
 <table>
 	<tr>
@@ -62,7 +62,7 @@ p1.battleField = document.getElementById(GameConstants.BATTLEFIELD1);
 p2.deckElement = document.getElementById(p2.id);
 p2.battleField = document.getElementById(GameConstants.BATTLEFIELD2);
 
-var playerMsgElement = document.getElementById("whichPlayer");
+var playerMsgElement = document.getElementById(GameConstants.PLAYERMSG);
 
 //Assuming player1 starts for now.
 var gameRound = new GameRound(p1.id, p1, p2); 

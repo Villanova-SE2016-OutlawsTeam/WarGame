@@ -150,6 +150,7 @@ var GameConstants = function() {
     var PLAYER2 = "player2"
     var BATTLEFIELD1 = "battlefield1"
     var BATTLEFIELD2 = "battlefield2"
+    var PLAYERMSG = "playerMessage"
     
     return {
         HUMAN: HUMAN,
@@ -157,7 +158,8 @@ var GameConstants = function() {
         PLAYER1: PLAYER1,
         PLAYER2: PLAYER2,
         BATTLEFIELD1: BATTLEFIELD1,
-        BATTLEFIELD2: BATTLEFIELD2
+        BATTLEFIELD2: BATTLEFIELD2,
+        PLAYERMSG: PLAYERMSG
     }
 }();
 
