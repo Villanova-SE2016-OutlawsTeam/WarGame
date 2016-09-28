@@ -8,41 +8,49 @@
 </head>
 <body>
 
-<!-- Render War Game main component --> 
-<h1>War Game</h1>
 <div id='war_game'>
-<h1 id='playerMessage'> </h1>
+    <header>
+        <table>
+            <tr>
+                <td><h1>War Game</h1></td>
+            </tr>
+            <tr>
+                <td><h1 id='playerMessage'></h1></td>
+            </tr>
+            <tr>
+                <td><button id='playWholeRound' onclick="playWholeRound()">Play Whole Round</button> </td>
+            </tr>
+            <tr>
+                <td><img onclick="dealDeck(event)" src="other_images/StartButton.png"></td>
+            </tr>            
+        </table>
+    </header>
 
-<table>
-	<tr>
-		<th colspan=2 class="left">Player 1</th>
-        <th></th>		
-        <th></th>       
-		<th colspan=2 class="right">Player 2</th>
-	</tr>
+    <table>
+    	<tr>
+    		<th colspan=2 class="left">Player 1</th>
+            <th></th>		
+            <th></th>       
+    		<th colspan=2 class="right">Player 2</th>
+    	</tr>
 
-    <tr>
-        <td class="col1">
-             <img id="player1" src="card_images/backface.png" class="backface">
-        </td>
-		
-		<td id="battlefield1" class="col2"></td>
-		
-		<td id="nomansland" class="col3">
-			<!-- Deal cards and remove start button on click -->
-			<div id="start">
-				<img onclick="dealDeck(event)" src="other_images/StartButton.png">
-			</div>
-		</td>
-		
-		<td><td id="battlefield2" class="col4"></td>
-		
-        <td class="col5">
-            <img id="player2" src="card_images/backface.png" class="backface">
-        </td>
-    </tr>   
+        <tr>
+            <td class="col1">
+                 <img id="player1" src="card_images/backface.png" class="backface">
+            </td>
+    		
+    		<td id="battlefield1" class="col2"></td>
+    		
+    		<td id="nomansland" class="col3"></td>
+    		
+    		<td><td id="battlefield2" class="col4"></td>
+    		
+            <td class="col5">
+                <img id="player2" src="card_images/backface.png" class="backface">
+            </td>
+        </tr>   
 
-</table>
+    </table>
 </div>
 
 <script src="Deck.js"></script>
@@ -68,16 +76,8 @@ var playerMsgElement = document.getElementById(GameConstants.PLAYERMSG);
 var gameRound = new GameRound(p1.id, p1, p2); 
 
 function dealDeck(event) {
-    //removing the wargame image
-    event.target.parentNode.remove(); 
+    adjustPage(event);    
 
-    //making the backfaces visible for each player
-    backfaces = document.getElementsByClassName("backface")
-    for (var i = 0; i < backfaces.length; i++) {
-        thisCard = backfaces[i];
-        thisCard.style.visibility = "visible"
-    }
-    
     starting_deck = new Deck()
 	starting_deck.create_deck()
 	starting_deck.shuffle()
@@ -95,14 +95,25 @@ function dealDeck(event) {
 	}
 
     updateClickListeners();
-    updatePlayerMessage();
+    updatePlayerMessage("Round: " + gameRound.count());
 }
 
-function updatePlayerMessage() {
-    player = gameRound.getCurrentPlayer();
+function adjustPage(event) {
+    //removing the wargame image
+    event.target.remove(); 
 
-    var playerMessage = "Round: " + gameRound.count();
-    playerMsgElement.innerHTML = playerMessage;
+    //making the backfaces visible for each player
+    backfaces = document.getElementsByClassName("backface")
+    for (var i = 0; i < backfaces.length; i++) {
+        thisCard = backfaces[i];
+        thisCard.style.visibility = "visible"
+    }
+
+    document.getElementById("playWholeRound").style.visibility = "visible";
+}
+
+function updatePlayerMessage(msg) {
+    playerMsgElement.innerHTML = msg;
 }
 
 function showCard(card, destElem) {
@@ -124,20 +135,38 @@ function updateClickListeners() {
     otherPlayer.deckElement.removeEventListener("click", cardClick);
 }
 
+function playWholeRound() {
+        player = gameRound.getCurrentPlayer();
+        otherPlayer = gameRound.getOtherPlayer();
+
+        if (player.id == GameConstants.PLAYER1) {
+            cardClick();
+            cardClick();   
+        } else {
+            cardClick();
+        }
+}
+
 function cardClick() {
     if (gameRound.isNewRound) {
-        updatePlayerMessage();
+        updatePlayerMessage("Round: " + gameRound.count());
         clearCardsFromBattleField();
     }
 
     var player = gameRound.getCurrentPlayer();
-    var card = player.active_deck.pop();
-
-    player.activeCard = card;
-    showCard(card, player.battleField);
     
-    gameRound.nextTurn();      
-    updateClickListeners();    
+    if (player.active_deck.count() > 0) {
+        var card = player.active_deck.pop();
+
+        player.activeCard = card;
+        showCard(card, player.battleField);
+        
+        gameRound.nextTurn();      
+        updateClickListeners();    
+    } else {
+        updatePlayerMessage("No More Cards.");
+    }
+    
 }
 
 </script>
