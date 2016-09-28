@@ -207,13 +207,17 @@ var GameRound = function(startingTurn, player1, player2) {
 
         if (player.playedTurn && otherPlayer.playedTurn) {
             this.isNewRound = true;    
-            player.playedTurn = false;
-            otherPlayer.playedTurn = false;
+            resetPlayerTurns();
             roundCount++;
         } else {
             this.isNewRound = false;    
         }       
 
+    }
+
+    function resetPlayerTurns() {
+        p1.playedTurn = false;
+        p2.playedTurn = false;
     }
 
     function whoseTurn() {
