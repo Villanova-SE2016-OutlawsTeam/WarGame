@@ -201,11 +201,9 @@ var GameRound = function(startingTurn, player1, player2) {
         currentTurn = (currentTurn == GameConstants.PLAYER1) ? 
                     GameConstants.PLAYER2 : GameConstants.PLAYER1;
 
-        player = getCurrentPlayer();
-        otherPlayer = getOtherPlayer();
-        player.playedTurn = true;         
+        getCurrentPlayer().playedTurn = true;
 
-        if (player.playedTurn && otherPlayer.playedTurn) {
+        if (p1.playedTurn && p2.playedTurn) {
             this.isNewRound = true;    
             resetPlayerTurns();
             roundCount++;
