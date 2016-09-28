@@ -174,10 +174,6 @@ var Player = function(type, id) {
         console.log("id: " + id + ", type: " + type)
     }
 
-    // function add_card(card) {
-
-    // }
-        
     return {
         id: id,
         type: type,
@@ -185,6 +181,22 @@ var Player = function(type, id) {
         active_deck: active_deck,
         discarded_deck: discarded_deck,
         activeCard: activeCard
+    }
+}
+
+var GameRound = function(startingTurn) {
+    var currentTurn = startingTurn;
+    var roundCount = 0;
+    
+    function changeTurn() {
+        return currentTurn == GameConstants.PLAYER1 ? GameConstants.PLAYER2 : GameConstants.PLAYER1;
+        roundCount++;
+    }
+
+    return {
+        changeTurn: changeTurn,
+        currentTurn: currentTurn,
+        roundCount: roundCount
     }
 }
 
