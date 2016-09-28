@@ -184,19 +184,41 @@ var Player = function(type, id) {
     }
 }
 
-var GameRound = function(startingTurn) {
+var GameRound = function(startingTurn, player1, player2) {
     var currentTurn = startingTurn;
-    var roundCount = 0;
+    var roundCount = 1;
+    var p1 = player1;
+    var p2 = player2;
     
-    function changeTurn() {
-        return currentTurn == GameConstants.PLAYER1 ? GameConstants.PLAYER2 : GameConstants.PLAYER1;
+    function nextTurn() {
+        currentTurn = (currentTurn == GameConstants.PLAYER1) ? 
+                    GameConstants.PLAYER2 : GameConstants.PLAYER1;
         roundCount++;
     }
 
+    function whoseTurn() {
+        return currentTurn;
+    }
+
+    function getCurrentPlayer() {
+        return currentTurn == p1.id ? p1 : p2;
+    }
+
+    function getOtherPlayer() {
+        return currentTurn == p1.id ? p2 : p1;   
+    }
+
+    function print() {
+        console.log("Round: " + roundCount + ", Turn: " + currentTurn);
+    }
+
     return {
-        changeTurn: changeTurn,
-        currentTurn: currentTurn,
-        roundCount: roundCount
+        nextTurn: nextTurn,
+        whoseTurn: whoseTurn,
+        getCurrentPlayer: getCurrentPlayer,
+        getOtherPlayer: getOtherPlayer,
+        roundCount: roundCount,
+        print: print
     }
 }
 

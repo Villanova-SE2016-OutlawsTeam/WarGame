@@ -12,6 +12,7 @@
 <h1>War Game</h1>
 <div id='war_game'>
 <h1 id="whichPlayer"> </h1>
+
 <table>
 	<tr>
 		<th colspan=2 class="left">Player 1</th>
@@ -21,8 +22,8 @@
 	</tr>
 
     <tr>
-        <td id="player1" class="col1" onclick="cardClick('player1')">
-             <img src="card_images/backface.png" class="backface">
+        <td class="col1">
+             <img id="player1" src="card_images/backface.png" class="backface">
         </td>
 		
 		<td id="battlefield1" class="col2"></td>
@@ -36,8 +37,8 @@
 		
 		<td><td id="battlefield2" class="col4"></td>
 		
-        <td id="player2" class="col5" onclick="cardClick('player2')">
-            <img src="card_images/backface.png" class="backface">
+        <td class="col5">
+            <img id="player2" src="card_images/backface.png" class="backface">
         </td>
     </tr>   
 
@@ -47,13 +48,24 @@
 <script src="Deck.js"></script>
 <script type="text/javascript">
 
+//Global vars
 var imageTag = ""
 var image_dir="card_images/"
 var playerPlayed = ""
 
-// Create 2 players
-p1 = new Player(GameConstants.HUMAN, GameConstants.PLAYER1)
-p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
+var p1 = new Player(GameConstants.HUMAN, GameConstants.PLAYER1)
+var p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
+
+p1.deckElement = document.getElementById(p1.id);
+p1.battleField = document.getElementById(GameConstants.BATTLEFIELD1);
+
+p2.deckElement = document.getElementById(p2.id);
+p2.battleField = document.getElementById(GameConstants.BATTLEFIELD2);
+
+
+var playerMsgElement = document.getElementById("whichPlayer");
+
+var gameRound = new GameRound(p1.id, p1, p2); //Assuming player1 starts for now.
 
 function dealDeck(event) {
     //removing the wargame image
@@ -81,54 +93,52 @@ function dealDeck(event) {
 			p2.active_deck.add(card)
 		}
 	}
+
+    startRoundOne();
 }
 
-function cardClick(playerNumber){
+function updatePlayerMessage() {
+    player = gameRound.getCurrentPlayer();
 
-    var imageTag = ""
-    var image_dir="card_images/"
-	var whichPlayer = playerNumber;
-	
-    if (playerNumber == GameConstants.PLAYER1) {
-		
-		if (playerPlayed == GameConstants.PLAYER1){
-			var playerTag = "" + whichPlayer + "'s turn is over" 
-			document.getElementById("whichPlayer").innerHTML = playerTag
-			return false;
-		} else {
-			var card = p1.active_deck.pop()
-			if (card) {
-				var card_img_file = image_dir + card.id + ".png"
-				var imageTag = "<img src='" + card_img_file + "' />"
-				var playerTag = "" + whichPlayer + " is playing " 
-				document.getElementById("whichPlayer").innerHTML = playerTag
-				document.getElementById(GameConstants.BATTLEFIELD1).innerHTML = imageTag
-			    playerPlayed = GameConstants.PLAYER1 
-			}
-		   
-		}
-    } else {
-	
-		if (playerPlayed == GameConstants.PLAYER2){
-			var playerTag = "" + whichPlayer + "'s turn is over"  
-			document.getElementById("whichPlayer").innerHTML = playerTag
-			return false;
-		} else {
-            var card = p2.active_deck.pop()
-            if (card) {
-                var card_img_file = image_dir + card.id + ".png"
-                var imageTag = "<img src='" + card_img_file + "' />"
-    			var playerTag = " " + whichPlayer + " is playing " 
-    			document.getElementById("whichPlayer").innerHTML = playerTag
-                document.getElementById(GameConstants.BATTLEFIELD2).innerHTML = imageTag
-    			playerPlayed = GameConstants.PLAYER2
-    		}
-        }
-
-    }
+    var playerMessage = player.id + " is playing.";
+    playerMsgElement.innerHTML = playerMessage;
 }
 
+function showCard(card, destElem) {
+    var card_img_file = image_dir + card.id + ".png";
+    var imageTag = "<img src='" + card_img_file + "' />";
+    destElem.innerHTML = imageTag;
+}
 
+function startRoundOne() {
+    updateClickListeners();
+    updatePlayerMessage();
+
+    gameRound.print();
+}
+
+function nextRound() {
+    gameRound.nextTurn();    
+    updateClickListeners();
+    updatePlayerMessage();
+
+    gameRound.print();
+}
+
+function updateClickListeners() {
+    activePlayer = gameRound.getCurrentPlayer();
+    otherPlayer = gameRound.getOtherPlayer();
+
+    activePlayer.deckElement.addEventListener("click", cardClick);    
+    otherPlayer.deckElement.removeEventListener("click", cardClick);
+}
+
+function cardClick() {
+    var player = gameRound.getCurrentPlayer();
+    var card = player.active_deck.pop();
+    showCard(card, player.battleField);
+    nextRound();
+}
 
 </script>
 
