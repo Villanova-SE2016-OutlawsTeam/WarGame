@@ -166,6 +166,7 @@ var Player = function(type, id) {
     var id = id
     var type = type
     var activeCard;
+    var playedTurn = false;
 
     var active_deck = new Deck()
     var discarded_deck = new Deck()
@@ -180,20 +181,37 @@ var Player = function(type, id) {
         print: print,
         active_deck: active_deck,
         discarded_deck: discarded_deck,
-        activeCard: activeCard
+        activeCard: activeCard,
+        playedTurn: playedTurn
     }
 }
 
 var GameRound = function(startingTurn, player1, player2) {
     var currentTurn = startingTurn;
     var roundCount = 1;
+
     var p1 = player1;
     var p2 = player2;
-    
+
+    var isNewRound = false;
+
     function nextTurn() {
         currentTurn = (currentTurn == GameConstants.PLAYER1) ? 
                     GameConstants.PLAYER2 : GameConstants.PLAYER1;
-        roundCount++;
+
+        player = getCurrentPlayer();
+        otherPlayer = getOtherPlayer();
+        player.playedTurn = true;         
+
+        if (player.playedTurn && otherPlayer.playedTurn) {
+            this.isNewRound = true;    
+            player.playedTurn = false;
+            otherPlayer.playedTurn = false;
+            roundCount++;
+        } else {
+            this.isNewRound = false;    
+        }       
+
     }
 
     function whoseTurn() {
@@ -201,11 +219,15 @@ var GameRound = function(startingTurn, player1, player2) {
     }
 
     function getCurrentPlayer() {
-        return currentTurn == p1.id ? p1 : p2;
+        return (currentTurn == p1.id) ? p1 : p2;
     }
 
     function getOtherPlayer() {
-        return currentTurn == p1.id ? p2 : p1;   
+        return (currentTurn == p1.id) ? p2 : p1;   
+    }
+
+    function count() {
+        return roundCount;
     }
 
     function print() {
@@ -217,7 +239,8 @@ var GameRound = function(startingTurn, player1, player2) {
         whoseTurn: whoseTurn,
         getCurrentPlayer: getCurrentPlayer,
         getOtherPlayer: getOtherPlayer,
-        roundCount: roundCount,
+        count: count,
+        isNewRound: isNewRound,
         print: print
     }
 }

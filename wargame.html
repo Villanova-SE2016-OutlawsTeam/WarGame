@@ -62,10 +62,10 @@ p1.battleField = document.getElementById(GameConstants.BATTLEFIELD1);
 p2.deckElement = document.getElementById(p2.id);
 p2.battleField = document.getElementById(GameConstants.BATTLEFIELD2);
 
-
 var playerMsgElement = document.getElementById("whichPlayer");
 
-var gameRound = new GameRound(p1.id, p1, p2); //Assuming player1 starts for now.
+//Assuming player1 starts for now.
+var gameRound = new GameRound(p1.id, p1, p2); 
 
 function dealDeck(event) {
     //removing the wargame image
@@ -94,13 +94,14 @@ function dealDeck(event) {
 		}
 	}
 
-    startRoundOne();
+    updateClickListeners();
+    updatePlayerMessage();
 }
 
 function updatePlayerMessage() {
     player = gameRound.getCurrentPlayer();
 
-    var playerMessage = player.id + " is playing.";
+    var playerMessage = "Round: " + gameRound.count();
     playerMsgElement.innerHTML = playerMessage;
 }
 
@@ -110,19 +111,9 @@ function showCard(card, destElem) {
     destElem.innerHTML = imageTag;
 }
 
-function startRoundOne() {
-    updateClickListeners();
-    updatePlayerMessage();
-
-    gameRound.print();
-}
-
-function nextRound() {
-    gameRound.nextTurn();    
-    updateClickListeners();
-    updatePlayerMessage();
-
-    gameRound.print();
+function clearCardsFromBattleField() {
+    p1.battleField.innerHTML = "";
+    p2.battleField.innerHTML = "";
 }
 
 function updateClickListeners() {
@@ -134,10 +125,19 @@ function updateClickListeners() {
 }
 
 function cardClick() {
+    if (gameRound.isNewRound) {
+        updatePlayerMessage();
+        clearCardsFromBattleField();
+    }
+
     var player = gameRound.getCurrentPlayer();
     var card = player.active_deck.pop();
+
+    player.activeCard = card;
     showCard(card, player.battleField);
-    nextRound();
+    
+    gameRound.nextTurn();      
+    updateClickListeners();    
 }
 
 </script>
