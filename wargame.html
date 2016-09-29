@@ -139,11 +139,18 @@ function playWholeRound() {
         player = gameRound.getCurrentPlayer();
         otherPlayer = gameRound.getOtherPlayer();
 
+        d1_count = p1.active_deck.count();
+        d2_count = p2.active_deck.count();
+
         if (player.id == GameConstants.PLAYER1) {
-            cardClick();
-            cardClick();
+            if (d1_count > 0 && d2_count > 0) {
+                cardClick();
+                cardClick();
+            }
         } else {
-            cardClick();
+            if (d2_count > 0) {
+                cardClick();    
+            }            
         }           
 }
 
@@ -163,10 +170,12 @@ function cardClick() {
         
         gameRound.nextTurn();      
         updateClickListeners();    
-    } else {
-        updatePlayerMessage("No More Cards.");
-    }
-    
+    } 
+
+    if (player.active_deck.count() == 0) {
+        player.deckElement.style.visibility = "hidden";
+
+    }     
 }
 
 </script>
