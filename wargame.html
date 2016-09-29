@@ -157,6 +157,8 @@ function playWholeRound() {
 function cardClick() {
     if (gameRound.isNewRound) {
         updatePlayerMessage("Round: " + gameRound.count());
+        p1.activeCard = null;
+        p2.activeCard = null;
         clearCardsFromBattleField();
     }
 
