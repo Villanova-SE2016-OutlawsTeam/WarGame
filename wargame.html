@@ -4,89 +4,81 @@
     <meta charset="UTF-8">
     <title>War Game</title>
 	
-<style>
-table {
-	width: 1280px;
-}
-
-.col1 {
-	width: 13%
-	text-align: left;
-}
-
-.col2 {
-	width: 35%;
-	text-align: right;
-}
-
-.col3 {
-	width: 4%;
-	text-align: center;
-}
-
-.col4 {
-	width: 35%;
-	text-align: left;
-}
-
-.col5 {
-	width: 13%;
-	text-align: right;
-}
-
-</style>
+    <link rel="stylesheet" href="wargame.css" type="text/css" />
 </head>
 <body>
 
-<!-- Render War Game main component --> 
-<h1>War Game</h1>
 <div id='war_game'>
-<table>
-	<tr>
-		<th colspan=2 align="left">Player 1</th>
-		<th align="center"></th>
-		<th colspan=2 align="right">Player 2</th>
-	</tr>
-    <tr>
-        <td id="player1" class="col1" onclick="cardClick('player1')">
-        </td>
-		
-		<td id="battlefield1" class="col2">            
-        </td>
-		
-		<td id="nomansland" class="col3">
-			<!-- Deal cards and remove start button on click -->
-			<div id="start">
-				<img onclick="this.parentNode.remove();dealDeck()" src="other_images/StartButton.png">
-			</div>
-		</td>
-		
-		<td 
-		<td id="battlefield2" class="col4">            
-        </td>
-		
-        <td id="player2" class="col5" onclick="cardClick('player2')">
-        </td>
-    </tr>   
+    <header>
+        <table>
+            <tr>
+                <td><h1>War Game</h1></td>
+            </tr>
+            <tr>
+                <td><h1 id='playerMessage'></h1></td>
+            </tr>
+            <tr>
+                <td><button id='playWholeRound' onclick="playWholeRound()">Play Whole Round</button> </td>
+            </tr>
+            <tr>
+                <td><img onclick="dealDeck(event)" src="other_images/StartButton.png"></td>
+            </tr>            
+        </table>
+    </header>
 
-</table>
+    <table>
+    	<tr>
+    		<th colspan=2 class="left">Player 1</th>
+            <th></th>		
+            <th></th>       
+    		<th colspan=2 class="right">Player 2</th>
+    	</tr>
+
+        <tr>
+            <td class="col1">
+                 <img id="player1" src="card_images/backface.png" class="backface">
+            </td>
+    		
+    		<td id="battlefield1" class="col2"></td>
+    		
+    		<td id="nomansland" class="col3"></td>
+    		
+    		<td><td id="battlefield2" class="col4"></td>
+    		
+            <td class="col5">
+                <img id="player2" src="card_images/backface.png" class="backface">
+            </td>
+        </tr>   
+
+    </table>
 </div>
 
 <script src="Deck.js"></script>
 <script type="text/javascript">
 
+//Global vars
 var imageTag = ""
 var image_dir="card_images/"
+var playerPlayed = ""
 
-// Create 2 players
-p1 = new Player(PlayerInfo.HUMAN, PlayerInfo.PLAYER1)
-p2 = new Player(PlayerInfo.COMPUTER, PlayerInfo.PLAYER2)
+var p1 = new Player(GameConstants.HUMAN, GameConstants.PLAYER1)
+var p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
 
-var p1_activeCard;
-var p2_activeCard;
+p1.deckElement = document.getElementById(p1.id);
+p1.battleField = document.getElementById(GameConstants.BATTLEFIELD1);
 
-function dealDeck() {
-	starting_deck = new Deck()
+p2.deckElement = document.getElementById(p2.id);
+p2.battleField = document.getElementById(GameConstants.BATTLEFIELD2);
+
+var playerMsgElement = document.getElementById(GameConstants.PLAYERMSG);
+
+//Assuming player1 starts for now.
+var gameRound = new GameRound(p1.id, p1, p2); 
+
+function dealDeck(event) {
+    adjustPage(event);    
+
+    starting_deck = new Deck()
 	starting_deck.create_deck()
 	starting_deck.shuffle()
 
@@ -97,43 +89,96 @@ function dealDeck() {
 
 		if (i % 2 == 0) {
 			p1.active_deck.add(card)
-			var card_img_file = image_dir + "backface" + ".png"
-			var imageTag = "<img src='" + card_img_file + "' />"
-			document.getElementById("player1").innerHTML = imageTag
 		} else {
 			p2.active_deck.add(card)
-			var card_img_file = image_dir + "backface" + ".png"
-			var imageTag = "<img src='" + card_img_file + "' />"
-			document.getElementById("player2").innerHTML = imageTag
 		}
 	}
+
+    updateClickListeners();
+    updatePlayerMessage("Round: " + gameRound.count());
 }
 
-function cardClick(playerNumber){
+function adjustPage(event) {
+    //removing the wargame image
+    event.target.remove(); 
 
-    var imageTag = ""
-    var image_dir="card_images/"
-	
-    if(playerNumber == PlayerInfo.PLAYER1){
-        var card = p1.active_deck.pop()
-		p1_activeCard = card
-        if(card){
-            var card_img_file = image_dir + card.id + ".png"
-            var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("battlefield1").innerHTML = imageTag
-        }
-    }else{
-        var card = p2.active_deck.pop()
-		p1_activeCard = card
-        if(card){
-            var card_img_file = image_dir + card.id + ".png"
-            var imageTag = "<img src='" + card_img_file + "' />"
-            document.getElementById("battlefield2").innerHTML = imageTag
-        }
+    //making the backfaces visible for each player
+    backfaces = document.getElementsByClassName("backface")
+    for (var i = 0; i < backfaces.length; i++) {
+        thisCard = backfaces[i];
+        thisCard.style.visibility = "visible"
     }
+
+    document.getElementById("playWholeRound").style.visibility = "visible";
 }
 
+function updatePlayerMessage(msg) {
+    playerMsgElement.innerHTML = msg;
+}
 
+function showCard(card, destElem) {
+    var card_img_file = image_dir + card.id + ".png";
+    var imageTag = "<img src='" + card_img_file + "' />";
+    destElem.innerHTML = imageTag;
+}
+
+function clearCardsFromBattleField() {
+    p1.battleField.innerHTML = "";
+    p2.battleField.innerHTML = "";
+}
+
+function updateClickListeners() {
+    activePlayer = gameRound.getCurrentPlayer();
+    otherPlayer = gameRound.getOtherPlayer();
+
+    activePlayer.deckElement.addEventListener("click", cardClick);    
+    otherPlayer.deckElement.removeEventListener("click", cardClick);
+}
+
+function playWholeRound() {
+        player = gameRound.getCurrentPlayer();
+        otherPlayer = gameRound.getOtherPlayer();
+
+        d1_count = p1.active_deck.count();
+        d2_count = p2.active_deck.count();
+
+        if (player.id == GameConstants.PLAYER1) {
+            if (d1_count > 0 && d2_count > 0) {
+                cardClick();
+                cardClick();
+            }
+        } else {
+            if (d2_count > 0) {
+                cardClick();    
+            }            
+        }           
+}
+
+function cardClick() {
+    if (gameRound.isNewRound) {
+        updatePlayerMessage("Round: " + gameRound.count());
+        p1.activeCard = null;
+        p2.activeCard = null;
+        clearCardsFromBattleField();
+    }
+
+    var player = gameRound.getCurrentPlayer();
+    
+    if (player.active_deck.count() > 0) {
+        var card = player.active_deck.pop();
+
+        player.activeCard = card;
+        showCard(card, player.battleField);
+        
+        gameRound.nextTurn();      
+        updateClickListeners();    
+    } 
+
+    if (player.active_deck.count() == 0) {
+        player.deckElement.style.visibility = "hidden";
+
+    }     
+}
 
 </script>
 
