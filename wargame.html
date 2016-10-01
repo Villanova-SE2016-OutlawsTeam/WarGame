@@ -166,9 +166,23 @@ function cardClick() {
     
     if (player.active_deck.count() > 0) {
         var card = player.active_deck.pop();
-
         player.activeCard = card;
         showCard(card, player.battleField);
+        player.playedTurn = true;
+
+        if (gameRound.bothPlayedCard()) {
+            if (gameRound.isTie()) {
+                //Missing: code for handling tie condition
+                console.log("Round " + gameRound.count() + ": Tie!")
+            } else {
+                var winner = gameRound.whoWon();
+                var loser = gameRound.whoLost();
+                console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
+
+                winner.discarded_deck.add(winner.activeCard);
+                winner.discarded_deck.add(loser.activeCard);
+            }
+        }
         
         gameRound.nextTurn();      
         updateClickListeners();    
