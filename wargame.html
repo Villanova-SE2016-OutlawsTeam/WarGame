@@ -49,7 +49,44 @@
                 <img id="player2" src="card_images/backface.png" class="backface">
             </td>
         </tr>   
+    </table>
 
+    <table>
+          <tr>
+            <td class="tie_player1">
+                 <img id="player1_downcard1" src="card_images/backface.png" class="tie_backface">
+            </td>
+            
+            <td class="tie_player1">
+                 <img id="player1_downcard2" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+            <td class="tie_player1">
+                 <img id="player1_downcard3" src="card_images/backface.png" class="tie_backface">
+            </td>
+            
+            <td class="tie_player1">
+                 <img id="player1_downcard4" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+            <td id="land" class="col4_backface"></td>
+            
+            <td class="tie_player2">
+                 <img id="player2_downcard1" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+             <td class="tie_player2">
+                 <img id="player2_downcard2" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+             <td class="tie_player2">
+                 <img id="player2_downcard3" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+            <td class="tie_player2">
+                 <img id="player2_downcard4" src="card_images/backface.png" class="tie_backface">
+            </td>
+        </tr>   
     </table>
 </div>
 
@@ -175,6 +212,11 @@ function cardClick() {
 
         if (gameRound.bothPlayedCard()) {
             if (gameRound.isTie()) {
+                 backfaces = document.getElementsByClassName("tie_backface")
+                 for (var i = 0; i < backfaces.length; i++) {
+                    thisCard = backfaces[i];
+                    thisCard.style.visibility = "visible"
+                 }
                 //Missing: code for handling tie condition
                 console.log("Round " + gameRound.count() + ": Tie!")
             } else {

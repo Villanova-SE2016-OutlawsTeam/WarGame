@@ -12,6 +12,11 @@ h1 {
     font-family: Arial Black, Arial Black, Gadget, sans-serif;
 }
 
+img{
+    width: 10vw;
+    height: auto;
+}
+
 /*This probably should be a relative size because
 this assumes a certain resolution on the monitor*/
 table {
@@ -38,6 +43,7 @@ td.col1 {
 td.col2 {
     width: 35%;
     text-align: right;
+    height: auto;
 }
 
 td.col3 {
@@ -48,6 +54,7 @@ td.col3 {
 td.col4 {
     width: 35%;
     text-align: left;
+    height: auto;
 }
 
 td.col5 {
@@ -55,7 +62,18 @@ td.col5 {
     text-align: right;
 }
 
+td.tie_player1 {
+    text-align: left;
+}
+
+td.tie_player2 {
+    text-align: right;
+}
+
 img.backface {
     visibility: hidden;
 }
 
+img.tie_backface {
+    visibility: hidden;
+}
