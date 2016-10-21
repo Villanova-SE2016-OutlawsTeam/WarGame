@@ -49,11 +49,51 @@
                 <img id="player2" src="card_images/backface.png" class="backface">
             </td>
         </tr>   
+    </table>
 
+    <table>
+          <tr>
+            <td class="tie_player1">
+                 <img id="player1_downcard1" src="card_images/backface.png" class="tie_backface">
+            </td>
+            
+            <td class="tie_player1">
+                 <img id="player1_downcard2" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+            <td class="tie_player1">
+                 <img id="player1_downcard3" src="card_images/backface.png" class="tie_backface">
+            </td>
+            
+            <td class="tie_player1">
+                 <img id="player1_downcard4" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+            <td id="land" class="col4_backface"></td>
+            
+            <td class="tie_player2">
+                 <img id="player2_downcard1" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+             <td class="tie_player2">
+                 <img id="player2_downcard2" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+             <td class="tie_player2">
+                 <img id="player2_downcard3" src="card_images/backface.png" class="tie_backface">
+            </td>
+
+            <td class="tie_player2">
+                 <img id="player2_downcard4" src="card_images/backface.png" class="tie_backface">
+            </td>
+        </tr>   
     </table>
 </div>
 
 <script src="Deck.js"></script>
+<script src="GameConstants.js"></script>
+<script src="Player.js"></script>
+<script src="GameRound.js"></script>
 <script type="text/javascript">
 
 //Global vars
@@ -166,9 +206,28 @@ function cardClick() {
     
     if (player.active_deck.count() > 0) {
         var card = player.active_deck.pop();
-
         player.activeCard = card;
         showCard(card, player.battleField);
+        player.playedTurn = true;
+
+        if (gameRound.bothPlayedCard()) {
+            if (gameRound.isTie()) {
+                 backfaces = document.getElementsByClassName("tie_backface")
+                 for (var i = 0; i < backfaces.length; i++) {
+                    thisCard = backfaces[i];
+                    thisCard.style.visibility = "visible"
+                 }
+                //Missing: code for handling tie condition
+                console.log("Round " + gameRound.count() + ": Tie!")
+            } else {
+                var winner = gameRound.whoWon();
+                var loser = gameRound.whoLost();
+                console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
+
+                winner.discarded_deck.add(winner.activeCard);
+                winner.discarded_deck.add(loser.activeCard);
+            }
+        }
         
         gameRound.nextTurn();      
         updateClickListeners();    
