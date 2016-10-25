@@ -65,9 +65,10 @@
                  <img id="player1_downcard3" src="card_images/backface.png" class="tie_backface">
             </td>
             
+			<!--
             <td class="tie_player1">
                  <img id="player1_downcard4" src="card_images/backface.png" class="tie_backface">
-            </td>
+            </td> -->
 
             <td id="land" class="col4_backface"></td>
             
@@ -83,9 +84,10 @@
                  <img id="player2_downcard3" src="card_images/backface.png" class="tie_backface">
             </td>
 
+			<!-- 
             <td class="tie_player2">
                  <img id="player2_downcard4" src="card_images/backface.png" class="tie_backface">
-            </td>
+            </td> -->
         </tr>   
     </table>
 </div>
@@ -100,6 +102,7 @@
 var imageTag = ""
 var image_dir="card_images/"
 var playerPlayed = ""
+var winnerCards = []
 
 var p1 = new Player(GameConstants.HUMAN, GameConstants.PLAYER1)
 var p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
@@ -163,6 +166,12 @@ function showCard(card, destElem) {
 }
 
 function clearCardsFromBattleField() {
+	backfaces = document.getElementsByClassName("tie_backface")
+    for (var i = 0; i < backfaces.length; i++) {
+    thisCard = backfaces[i];
+    thisCard.style.visibility = "hidden"
+    }
+	
     p1.battleField.innerHTML = "";
     p2.battleField.innerHTML = "";
 }
@@ -195,20 +204,30 @@ function playWholeRound() {
 }
 
 function cardClick() {
+	
     if (gameRound.isNewRound) {
         updatePlayerMessage("Round: " + gameRound.count());
         p1.activeCard = null;
         p2.activeCard = null;
         clearCardsFromBattleField();
     }
-
+	
+	console.log(p1.id + " Count Active Deck: " + p1.active_deck.count());
+	console.log(p1.id + " Count Discard Deck: " + p1.discarded_deck.count());
+	console.log(p2.id + " Count Active Deck: " + p2.active_deck.count());
+	console.log(p2.id + " Count Discard Deck: " + p2.discarded_deck.count());
+	
     var player = gameRound.getCurrentPlayer();
     
     if (player.active_deck.count() > 0) {
         var card = player.active_deck.pop();
+		if (player.active_deck.count() == 0) {
+		player.deckElement.style.visibility = "hidden";
+		}  
         player.activeCard = card;
         showCard(card, player.battleField);
         player.playedTurn = true;
+		winnerCards.push(player.activeCard);
 
         if (gameRound.bothPlayedCard()) {
             if (gameRound.isTie()) {
@@ -219,24 +238,60 @@ function cardClick() {
                  }
                 //Missing: code for handling tie condition
                 console.log("Round " + gameRound.count() + ": Tie!")
+				
+				// add war cards to winnings card array
+				for (var j = 0; j < 3; j++) {
+					if (p1.active_deck.count() > 1) {
+						warCard = p1.active_deck.pop();
+						winnerCards.push(warCard);
+					}
+					if (p2.active_deck.count() > 1) {
+						warCard = p2.active_deck.pop();
+						winnerCards.push(warCard);
+					}
+				}
             } else {
                 var winner = gameRound.whoWon();
                 var loser = gameRound.whoLost();
                 console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
-
-                winner.discarded_deck.add(winner.activeCard);
-                winner.discarded_deck.add(loser.activeCard);
+				
+				// add cards to winner's discard deck
+				while(winnerCards.length) {
+				wonCard = winnerCards.pop();
+                winner.discarded_deck.add(wonCard);
+				}
+				
             }
+			
+			if ((p1.discarded_deck.count() == 0 && p1.active_deck == 0) || (p2.discarded_deck.count() == 0 && p2.active_deck.count() == 0)) {
+				updatePlayerMessage("GAME OVER! " + winner.id + " wins!");
+			}
+			if (p1.active_deck.count() == 0) {
+				p1.discarded_deck.shuffle();
+				p1.deckElement.style.visibility = "visible";
+				
+				while (p1.discarded_deck.count() > 0) {
+					card = p1.discarded_deck.pop();
+					p1.active_deck.add(card);
+				}
+			}
+			
+			if (p2.active_deck.count() == 0) {
+				p2.discarded_deck.shuffle();
+				p2.deckElement.style.visibility = "visible";
+				
+				while (p2.discarded_deck.count() > 0) {
+					card = p2.discarded_deck.pop();
+					p2.active_deck.add(card);
+				}
+			}
         }
-        
-        gameRound.nextTurn();      
-        updateClickListeners();    
+		
+		gameRound.nextTurn();      
+		updateClickListeners(); 
+           
     } 
 
-    if (player.active_deck.count() == 0) {
-        player.deckElement.style.visibility = "hidden";
-
-    }     
 }
 
 </script>
