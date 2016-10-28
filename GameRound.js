@@ -41,6 +41,7 @@ var GameRound = function(startingTurn, player1, player2) {
             winner = (p1.activeCard.value > p2.activeCard.value) ? p1 : p2;
             return winner;
         }
+
         return null;
     }
 
