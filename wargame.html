@@ -23,8 +23,14 @@
             </tr>
 
             <tr>
+                <td><h1 id='roundWinner'></h1></td>
+            <tr>
                 <td><button id='playWholeRound' onclick="playWholeRound()">Play Whole Round</button> </td>
+<<<<<<< HEAD
                 <td><button id='proceedWhenTie' onclick="proceed()">Proceed</button></td>
+=======
+                <td><button id='proceedWhenTie' onclick="proceed()">Proceed</button> </td>
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
             </tr>
             <tr>
                 <td><img onclick="dealDeck(event)" src="other_images/StartButton.png"></td>
@@ -72,8 +78,13 @@
             </td>
 
             <td id="land" class="col3"></td>
+<<<<<<< HEAD
             
             <td class="tie_player2">
+=======
+
+             <td class="tie_player2">
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
                  <img id="player2_downcard1" src="card_images/backface.png" class="tie_backface">
             </td>
 
@@ -81,9 +92,22 @@
                  <img id="player2_downcard2" src="card_images/backface.png" class="tie_backface">
             </td>
 
-             <td class="tie_player2">
+            <td class="tie_player2">
                  <img id="player2_downcard3" src="card_images/backface.png" class="tie_backface">
             </td>
+<<<<<<< HEAD
+=======
+        </tr>
+    </table>
+
+    <table>
+        <tr>  
+            <td id="player1_downcard4" class="col2"></td> 
+
+            <td id="land" class="col4_backface" class="col3"></td>
+
+            <td id="player2_downcard4" class="col4"></td>
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
         </tr>   
     </table>
 
@@ -119,12 +143,20 @@ p2.deckElement = document.getElementById(p2.id);
 p2.battleField = document.getElementById(GameConstants.BATTLEFIELD2);
 
 var playerMsgElement = document.getElementById(GameConstants.PLAYERMSG);
+<<<<<<< HEAD
 //Round Winner Element
 var roundWinnerElement = document.getElementById(GameConstants.ROUNDWINNER);
 
 var tieCardPlayer1 = document.getElementById("player1_downcard4");
 var tieCardPlayer2 = document.getElementById("player2_downcard4");
+=======
+//console.log(playerMsgElement)
+var roundWinnerElement = document.getElementById(GameConstants.ROUNDWINNER);
+//console.log(roundWinnerElement);
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
 
+var tieCardPlayer1 = document.getElementById("player1_downcard4");
+var tieCardPlayer2 = document.getElementById("player2_downcard4");
 //Assuming player1 starts for now.
 var gameRound = new GameRound(p1.id, p1, p2); 
 
@@ -220,21 +252,32 @@ function playWholeRound() {
         }           
 }
 
+<<<<<<< HEAD
 function proceed(){
     document.getElementById("proceedWhenTie").style.visibility = "hidden";
     //display faced down cards when tie
+=======
+function proceed() {
+    document.getElementById("proceedWhenTie").style.visibility = "hidden";
+    //display faced down cards when tied 
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
     backfaces = document.getElementsByClassName("tie_backface")
     for (var i = 0; i < backfaces.length; i++) {
         thisCard = backfaces[i];
         thisCard.style.visibility = "visible"
     }
 
+<<<<<<< HEAD
     //add war cards to winning card array
+=======
+    // add war cards to winnings card array
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
     for (var j = 0; j < 4; j++) {
         if (p1.active_deck.count() > 4) {
             warCard = p1.active_deck.pop();
             winnerCards.push(warCard);
         }
+<<<<<<< HEAD
         
         if (p2.active_deck.count() > 4) {
             warCard = p2.active_deck.pop();
@@ -260,6 +303,33 @@ function proceed(){
     }
 
 
+=======
+        if (p2.active_deck.count() > 4) {
+            warCard = p2.active_deck.pop();
+            winnerCards.push(warCard);
+        } 
+    }
+               
+    for(var i =0; i<winnerCards.length; i++){
+        console.log(winnerCards[i].value)
+    }
+
+    showCard(winnerCards[5], tieCardPlayer1)
+    showCard(winnerCards[9], tieCardPlayer2)
+    console.log(p1)
+
+    if(winnerCards[5].value > winnerCards[9].value){
+            var winner = p1;
+            //p1.discarded_deck.push(winnerCards)
+            console.log("Winner: " + winner.id)
+            updateRoundWinner("Winner: " + winner.id);
+    }else{
+            var winner = p2;
+            //p2.discarded_deck.push(winnerCards)
+            console.log("Winner: " + winner.id) 
+            updateRoundWinner("Winner: " + winner.id);
+    }           
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
 }
 
 function cardClick() {
@@ -272,11 +342,12 @@ function cardClick() {
         document.getElementById("proceedWhenTie").style.visibility = "hidden";
     }
 	
+    /*
 	console.log(p1.id + " Count Active Deck: " + p1.active_deck.count());
 	console.log(p1.id + " Count Discard Deck: " + p1.discarded_deck.count());
 	console.log(p2.id + " Count Active Deck: " + p2.active_deck.count());
 	console.log(p2.id + " Count Discard Deck: " + p2.discarded_deck.count());
-	
+	*/
     var player = gameRound.getCurrentPlayer();
     
     if (player.active_deck.count() > 0) {
@@ -293,6 +364,51 @@ function cardClick() {
             if (gameRound.isTie()) {
                  updateRoundWinner("Tie!");
                  document.getElementById("proceedWhenTie").style.visibility = "visible";
+<<<<<<< HEAD
+=======
+                 /*
+                 backfaces = document.getElementsByClassName("tie_backface")
+                 for (var i = 0; i < backfaces.length; i++) {
+                    thisCard = backfaces[i];
+                    thisCard.style.visibility = "visible"
+                 }
+                console.log("Round " + gameRound.count() + ": Tie!")
+				// add war cards to winnings card array
+				for (var j = 0; j < 4; j++) {
+					if (p1.active_deck.count() > 3) {
+						warCard = p1.active_deck.pop();
+						winnerCards.push(warCard);
+					}
+					if (p2.active_deck.count() > 3) {
+						warCard = p2.active_deck.pop();
+						winnerCards.push(warCard);
+					}
+				}
+               
+                for(var i =0; i<winnerCards.length; i++){
+                    console.log(winnerCards[i].value)
+                }
+                
+                console.log(winnerCards[5])
+                console.log(winnerCards[9])
+                console.log(tieCardPlayer1);
+                showCard(winnerCards[5], tieCardPlayer1)
+                showCard(winnerCards[9], tieCardPlayer2)
+                //showCard(winnerCards[5], player1_downcard4);
+                //showCard(winnerCards[6], player2_downcard1);
+                
+                /*
+                if(winnerCards[5].value > winnerCards[9].value){
+                    var winner = p1;
+                    p1.discarded_deck.push(winnerCards)
+                    console.log("Winner: " + p1.id)
+                }else{
+                    var winner = p2;
+                    p2.discarded_deck.push(winnerCards)
+                    console.log("Winner: " + p2.id)
+                }
+                */
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
             } else {
                 var winner = gameRound.whoWon();
                 updateRoundWinner("Winner: " + winner.id);
@@ -310,8 +426,13 @@ function cardClick() {
 			if ((p1.discarded_deck.count() == 0 && p1.active_deck == 0) || (p2.discarded_deck.count() == 0 && p2.active_deck.count() == 0)) {
 				updatePlayerMessage("GAME OVER! " + winner.id + " wins!");
 			}
+<<<<<<< HEAD
 
 			if (p1.active_deck.count() == 0) {
+=======
+			/*
+            if (p1.active_deck.count() == 0) {
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
 				p1.discarded_deck.shuffle();
 				p1.deckElement.style.visibility = "visible";
 				
@@ -330,6 +451,7 @@ function cardClick() {
 					p2.active_deck.add(card);
 				}
 			}
+            */
         }
 		
 		gameRound.nextTurn();      

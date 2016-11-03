@@ -140,3 +140,7 @@ var Deck = function() {     //Deck objects - an array of Card objects
         add: add
     };
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1f1a2e71aedc533ab3f87e5f2ed031a839819d36
