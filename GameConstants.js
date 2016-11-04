@@ -8,6 +8,7 @@ var GameConstants = function() {
     var BATTLEFIELD1 = "battlefield1"
     var BATTLEFIELD2 = "battlefield2"
     var PLAYERMSG = "playerMessage"
+    var ROUNDWINNER = "roundWinner"
     
     return {
         HUMAN: HUMAN,
@@ -16,6 +17,7 @@ var GameConstants = function() {
         PLAYER2: PLAYER2,
         BATTLEFIELD1: BATTLEFIELD1,
         BATTLEFIELD2: BATTLEFIELD2,
-        PLAYERMSG: PLAYERMSG
+        PLAYERMSG: PLAYERMSG,
+        ROUNDWINNER: ROUNDWINNER
     }
 }();
