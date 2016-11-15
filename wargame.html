@@ -24,8 +24,10 @@
 
             <tr>
                 <td><button id='playWholeRound' onclick="playWholeRound()">Play Whole Round</button> </td>
-                <td><button id='proceedWhenTie' onclick="proceed()">Proceed</button></td>
             </tr>
+			<tr>
+				<td><button id='proceedWhenTie' onclick="proceed()">Tie Breaker</button></td>
+			</tr>
             <tr>
                 <td><img onclick="dealDeck(event)" src="other_images/StartButton.png"></td>
             </tr>            
@@ -228,38 +230,76 @@ function proceed(){
         thisCard = backfaces[i];
         thisCard.style.visibility = "visible"
     }
-
+	
     //add war cards to winning card array
     for (var j = 0; j < 4; j++) {
-        if (p1.active_deck.count() > 4) {
-            warCard = p1.active_deck.pop();
-            winnerCards.push(warCard);
-        }
-        
-        if (p2.active_deck.count() > 4) {
-            warCard = p2.active_deck.pop();
-            winnerCards.push(warCard);
-        }
+		swapDecks();
+        p1.activeCard = p1.active_deck.pop();
+		p2.activeCard = p2.active_deck.pop();
+        winnerCards.push(p1.activeCard);
+		winnerCards.push(p2.activeCard);
     }
 
     for(var i=0; i<winnerCards.length; i++){
         console.log(winnerCards[i].value);
     }
 
-    showCard(winnerCards[5], tieCardPlayer1);
-    showCard(winnerCards[9], tieCardPlayer2);
+    showCard(p1.activeCard, tieCardPlayer1);
+    showCard(p2.activeCard, tieCardPlayer2);
+	
+	if (gameRound.isTie() && !gameOver()) {
+        updateRoundWinner("Tie!");
+        document.getElementById("proceedWhenTie").style.visibility = "visible";
+	} else {
+		// determine and display round winner
+		winner = gameRound.whoWon();
+		updateRoundWinner("Winner: " + winner.id);
+        var loser = gameRound.whoLost();
+        console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
+		
+		// add cards to winner's discard deck
+		while(winnerCards.length) {
+			wonCard = winnerCards.pop();
+            winner.discarded_deck.add(wonCard);
+		}
+	}
 
-    if(winnerCards[5].value > winnerCards[9].value){
-        var winner = p1;
-        console.log("Winner: " + winner.id);
-        updateRoundWinner("Winner: " + winner.id);
-    }else{
-        var winner = p2;
-        console.log("Winner: " + winner.id);
-        updateRoundWinner("Winner: " + winner.id);
-    }
+	document.getElementById("playWholeRound").style.visibility = "visible";
+}
 
+// Moves discarded_deck to active_deck if active_deck is empty
+function swapDecks() {
+	if (p1.active_deck.count() == 0) {
+		p1.discarded_deck.shuffle();
+		p1.deckElement.style.visibility = "visible";
+				
+		while (p1.discarded_deck.count() > 0) {
+			card = p1.discarded_deck.pop();
+			p1.active_deck.add(card);
+		}
+	}
+			
+	if (p2.active_deck.count() == 0) {
+		p2.discarded_deck.shuffle();
+		p2.deckElement.style.visibility = "visible";
+				
+		while (p2.discarded_deck.count() > 0) {
+			card = p2.discarded_deck.pop();
+			p2.active_deck.add(card);
+		}
+	}
+}
 
+function gameOver() {
+	var gameOver = false; 
+	
+	if (gameRound.bothPlayedCard) {
+		if (((p1.discarded_deck.count() + p1.active_deck.count() == 0) || (p2.discarded_deck.count() + p2.active_deck.count() == 0)) || 
+		((p1.discarded_deck.count() + p1.active_deck.count() < 4)  || (p2.discarded_deck.count() + p2.active_deck.count() < 4))) {
+			gameOver = true;
+		}
+	}
+	return gameOver;
 }
 
 function cardClick() {
@@ -271,11 +311,6 @@ function cardClick() {
         clearCardsFromBattleField();
         document.getElementById("proceedWhenTie").style.visibility = "hidden";
     }
-	
-	console.log(p1.id + " Count Active Deck: " + p1.active_deck.count());
-	console.log(p1.id + " Count Discard Deck: " + p1.discarded_deck.count());
-	console.log(p2.id + " Count Active Deck: " + p2.active_deck.count());
-	console.log(p2.id + " Count Discard Deck: " + p2.discarded_deck.count());
 	
     var player = gameRound.getCurrentPlayer();
     
@@ -290,9 +325,10 @@ function cardClick() {
 		winnerCards.push(player.activeCard);
 
         if (gameRound.bothPlayedCard()) {
-            if (gameRound.isTie()) {
+            if (gameRound.isTie() && !gameOver()) {
                  updateRoundWinner("Tie!");
                  document.getElementById("proceedWhenTie").style.visibility = "visible";
+				 document.getElementById("playWholeRound").style.visibility = "hidden";
             } else {
                 var winner = gameRound.whoWon();
                 updateRoundWinner("Winner: " + winner.id);
@@ -307,29 +343,18 @@ function cardClick() {
 				
             }
 			
-			if ((p1.discarded_deck.count() == 0 && p1.active_deck == 0) || (p2.discarded_deck.count() == 0 && p2.active_deck.count() == 0)) {
+			console.log(p1.id + " Count Active Deck: " + p1.active_deck.count());
+			console.log(p1.id + " Count Discard Deck: " + p1.discarded_deck.count());
+			console.log(p2.id + " Count Active Deck: " + p2.active_deck.count());
+			console.log(p2.id + " Count Discard Deck: " + p2.discarded_deck.count());
+			
+			if (gameOver()) {
+				document.getElementById("playWholeRound").style.visibility = "hidden";
 				updatePlayerMessage("GAME OVER! " + winner.id + " wins!");
+				return;
 			}
 
-			if (p1.active_deck.count() == 0) {
-				p1.discarded_deck.shuffle();
-				p1.deckElement.style.visibility = "visible";
-				
-				while (p1.discarded_deck.count() > 0) {
-					card = p1.discarded_deck.pop();
-					p1.active_deck.add(card);
-				}
-			}
-			
-			if (p2.active_deck.count() == 0) {
-				p2.discarded_deck.shuffle();
-				p2.deckElement.style.visibility = "visible";
-				
-				while (p2.discarded_deck.count() > 0) {
-					card = p2.discarded_deck.pop();
-					p2.active_deck.add(card);
-				}
-			}
+			swapDecks();
         }
 		
 		gameRound.nextTurn();      
