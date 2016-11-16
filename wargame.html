@@ -72,8 +72,14 @@
             <td class="tie_player1">
                  <img id="player1_downcard3" src="card_images/backface.png" class="tie_backface">
             </td>
+			
+			<td id="player1_downcard4" class="tie_player1">
+            </td>
 
             <td id="land" class="col3"></td>
+			
+			<td id="player2_downcard4" class="tie_player2">
+            </td>
             
             <td class="tie_player2">
                  <img id="player2_downcard1" src="card_images/backface.png" class="tie_backface">
@@ -89,14 +95,6 @@
         </tr>   
     </table>
 
-    <table>
-        <tr>
-            <td id="player1_downcard4" class="col2"></td>
-
-            <td id="land" class="col3"></td>
-
-            <td id="player2_downcard4" class="col4"></td>
-    </table>
 </div>
 
 <script src="Deck.js"></script>
@@ -224,6 +222,7 @@ function playWholeRound() {
 
 function proceed(){
     document.getElementById("proceedWhenTie").style.visibility = "hidden";
+	document.getElementById("playWholeRound").style.visibility = "visible";
     //display faced down cards when tie
     backfaces = document.getElementsByClassName("tie_backface")
     for (var i = 0; i < backfaces.length; i++) {
@@ -247,12 +246,13 @@ function proceed(){
     showCard(p1.activeCard, tieCardPlayer1);
     showCard(p2.activeCard, tieCardPlayer2);
 	
-	if (gameRound.isTie() && !gameOver()) {
+	if (p1.activeCard.value == p2.activeCard.value && !gameOver()) {
         updateRoundWinner("Tie!");
         document.getElementById("proceedWhenTie").style.visibility = "visible";
+		document.getElementById("playWholeRound").style.visibility = "hidden";
 	} else {
 		// determine and display round winner
-		winner = gameRound.whoWon();
+		winner = (p1.activeCard.value > p2.activeCard.value) ? p1 : p2;
 		updateRoundWinner("Winner: " + winner.id);
         var loser = gameRound.whoLost();
         console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
@@ -264,7 +264,6 @@ function proceed(){
 		}
 	}
 
-	document.getElementById("playWholeRound").style.visibility = "visible";
 }
 
 // Moves discarded_deck to active_deck if active_deck is empty
