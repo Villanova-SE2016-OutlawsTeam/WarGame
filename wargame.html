@@ -243,18 +243,13 @@ var proceed = function() {
 		winnerCards.push(p2.activeCard);
     }
 
-    for(var i=0; i<winnerCards.length; i++){
-        console.log(winnerCards[i].value);
-    }
-
     showCard(p1.activeCard, tieCardPlayer1);
     showCard(p2.activeCard, tieCardPlayer2);
 	
 	if (p1.activeCard.value == p2.activeCard.value && !LessThan4Cards()) {
+		updateRoundWinner("Tie!");
+		console.log("Tie!");
 		proceed();
-        /*updateRoundWinner("Tie!");
-        document.getElementById("proceedWhenTie").style.visibility = "visible";
-		document.getElementById("playWholeRound").style.visibility = "hidden";*/
 	} else if (p1.activeCard.value == p2.activeCard.value && LessThan4Cards) {
 		gameOver = true;
 		Winner = (p1.active_deck.count() + p1.discarded_deck.count() > p2.active_deck.count() + p2.discarded_deck.count()) ? p1 : p2;
@@ -262,6 +257,10 @@ var proceed = function() {
 	} else {
 		Winner = (p1.activeCard.value > p2.activeCard.value) ? p1 : p2;
 		Loser = (Winner === p1) ? p2 : p1;
+		
+		for(var i=0; i<winnerCards.length; i++){
+        console.log(winnerCards[i].value);
+		}
 	}
 	
 	document.getElementById("playWholeRound").style.visibility = "visible";
@@ -324,7 +323,6 @@ function cardClick() {
         p1.activeCard = null;
         p2.activeCard = null;
         clearCardsFromBattleField();
-        document.getElementById("proceedWhenTie").style.visibility = "hidden";
     }
 	
     var player = gameRound.getCurrentPlayer();
@@ -345,6 +343,7 @@ function cardClick() {
         if (gameRound.bothPlayedCard()) {
             if (gameRound.isTie() && !LessThan4Cards()) {
                  updateRoundWinner("Tie!");
+				 console.log("Tie!");
                  document.getElementById("playWholeRound").style.visibility = "hidden";
 				 tie = new proceed();
 				 winner = tie.Winner;
@@ -360,10 +359,9 @@ function cardClick() {
             }
 			
 			updateRoundWinner("Winner: " + winner.id);
-            //loser = gameRound.whoLost();
             console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
 				
-				// add cards to winner's discard deck
+			// add cards to winner's discard deck
 			while(winnerCards.length) {
 				wonCard = winnerCards.pop();
                 winner.discarded_deck.add(wonCard);
@@ -379,12 +377,16 @@ function cardClick() {
 			console.log(p2.id + " Count Discard Deck: " + p2.discarded_deck.count());
 			
 			if (gameOver) {
+				if (loser.active_deck.count() == 0) {
+					loser.deckElement.style.visibility = "hidden";
+				}
 				document.getElementById("playWholeRound").style.visibility = "hidden";
 				updatePlayerMessage("GAME OVER!");
+				return;
 			}
 
 			swapDecks();
-        }
+        } 
 		
 		gameRound.nextTurn();      
 		updateClickListeners(); 
