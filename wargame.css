@@ -2,6 +2,13 @@ header {
     text-align: center;
 }
 
+body {
+	background-image: url("other_images/faceoff.jpg");
+	background-color: #000000;
+	background-repeat: no-repeat;
+	color: white;
+}
+
 button {
     font-size: 200%;
     visibility: hidden;
