@@ -58,6 +58,15 @@ var Deck = function() {     //Deck objects - an array of Card objects
             }
         }        
     } //end fun
+
+    function deep_copy() {
+        d = new Deck();
+        cardArray.forEach(function(card) {
+            d.add(card);
+        });
+
+        return d;
+    }
     
     function count() {
         return cardArray.length;
@@ -124,6 +133,10 @@ var Deck = function() {     //Deck objects - an array of Card objects
     }
 
     function add(card) {
+        if (typeof card === "undefined") {
+            alert("undefined added to deck.");
+        }
+
         cardArray.push(card)
     }
     
@@ -137,6 +150,7 @@ var Deck = function() {     //Deck objects - an array of Card objects
         shuffle: shuffle,
         shuffle_N_Times: shuffle_N_Times,
         pop: pop,
-        add: add
+        add: add,
+        deep_copy: deep_copy
     };
 }

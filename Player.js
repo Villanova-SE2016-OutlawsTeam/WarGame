@@ -12,6 +12,38 @@ var Player = function(type, id) {
         console.log("id: " + id + ", type: " + type)
     }
 
+    function nextCardFromDeck() {
+        var card = null;
+
+        if (active_deck.count() > 0) {
+            card = active_deck.pop();    
+        } else if (active_deck.count() == 0 && discarded_deck.count() > 0) {
+            swapDecks();
+            active_deck.shuffle();
+            card = active_deck.pop();
+        }
+
+        if (card == null) {
+            console.log("card is null here.")
+        }
+
+        return card;
+    }
+
+    function swapDecks() {
+        console.log(id + " called swapDecks");
+        
+        var count = discarded_deck.count();
+        for (var i = 0; i < count; i++) {
+            card = discarded_deck.pop();
+            active_deck.add(card);
+        }
+    }
+
+    function totalCardCount() {
+        return active_deck.count() + discarded_deck.count();
+    }
+
     return {
         id: id,
         type: type,
@@ -19,6 +51,8 @@ var Player = function(type, id) {
         active_deck: active_deck,
         discarded_deck: discarded_deck,
         activeCard: activeCard,
-        playedTurn: playedTurn
+        playedTurn: playedTurn,
+        nextCardFromDeck: nextCardFromDeck,
+        totalCardCount: totalCardCount
     }
 }
