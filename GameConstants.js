@@ -9,6 +9,8 @@ var GameConstants = function() {
     var BATTLEFIELD2 = "battlefield2"
     var PLAYERMSG = "playerMessage"
     var ROUNDWINNER = "roundWinner"
+    var MIN_CARDS_FOR_TIE = 4;
+    var MIN_CARDS_FOR_ROUND = 1;
     
     return {
         HUMAN: HUMAN,
@@ -18,6 +20,8 @@ var GameConstants = function() {
         BATTLEFIELD1: BATTLEFIELD1,
         BATTLEFIELD2: BATTLEFIELD2,
         PLAYERMSG: PLAYERMSG,
-        ROUNDWINNER: ROUNDWINNER
+        ROUNDWINNER: ROUNDWINNER,
+        MIN_CARDS_FOR_TIE: MIN_CARDS_FOR_TIE,
+        MIN_CARDS_FOR_ROUND: MIN_CARDS_FOR_ROUND
     }
 }();

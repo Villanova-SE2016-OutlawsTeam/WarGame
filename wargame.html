@@ -14,6 +14,19 @@
             <tr>
                 <td><h1>War Game</h1></td>
             </tr>
+            
+            <!-- Menu for selecting the game mode:
+            human vs human
+            or human vs computer -->
+            <tr id ="GameModeChoice">
+                <td>
+                    <form id="gameMode" style="vertical-align: middle">
+                        <input type="radio"  name="gameMode" value="mode1" onclick="gameMode_HumanVsComputer()">Human vs. Computer<br>
+                        <input type="radio"  name="gameMode" value="mode2" onclick="gameMode_HumanVsHuman()">Human vs. Human<br>
+                    </form>
+                </td>
+            <tr>
+
             <tr>
                 <td><h1 id='playerMessage'></h1></td>
             </tr>
@@ -25,9 +38,7 @@
             <tr>
                 <td><button id='playWholeRound' onclick="playWholeRound()">Play Whole Round</button> </td>
             </tr>
-			<tr>
-				<td><button id='proceedWhenTie' onclick="proceed()">Tie Breaker</button></td>
-			</tr>
+			
             <tr>
                 <td><img onclick="dealDeck(event)" src="other_images/StartButton.png"></td>
             </tr>            
@@ -107,7 +118,6 @@
 var imageTag = ""
 var image_dir="card_images/"
 var playerPlayed = ""
-var winnerCards = []
 
 var p1 = new Player(GameConstants.HUMAN, GameConstants.PLAYER1)
 var p2 = new Player(GameConstants.COMPUTER, GameConstants.PLAYER2)
@@ -126,7 +136,24 @@ var tieCardPlayer1 = document.getElementById("player1_downcard4");
 var tieCardPlayer2 = document.getElementById("player2_downcard4");
 
 //Assuming player1 starts for now.
-var gameRound = new GameRound(p1.id, p1, p2); 
+var gameRound = new GameRound(p1.id, p1, p2);
+var gameMode = ""
+
+function gameMode_HumanVsComputer() {
+    gameMode = "HumanVsComputer"
+    modeMenu = document.getElementById("GameModeChoice");
+    console.log(modeMenu);
+    modeMenu.remove();
+}
+
+function gameMode_HumanVsHuman() {
+    gameMode = "HumanVsHuman"
+    modeMenu = document.getElementById("GameModeChoice");
+    console.log(modeMenu);
+    modeMenu.remove();
+}
+
+//First entry point
 
 function dealDeck(event) {
     adjustPage(event);    
@@ -151,6 +178,7 @@ function dealDeck(event) {
     updatePlayerMessage("Round: " + gameRound.count());
 }
 
+//called by dealDeck
 function adjustPage(event) {
     //removing the wargame image
     event.target.remove(); 
@@ -220,95 +248,11 @@ function playWholeRound() {
         }           
 }
 
-var proceed = function() {
-	Winner = null; 
-	Loser = null;
-	gameOver = false;
-	
-    //document.getElementById("proceedWhenTie").style.visibility = "hidden";
-	//document.getElementById("playWholeRound").style.visibility = "visible";
-    //display faced down cards when tie
-    backfaces = document.getElementsByClassName("tie_backface")
-    for (var i = 0; i < backfaces.length; i++) {
-        thisCard = backfaces[i];
-        thisCard.style.visibility = "visible"
-    }
-	
-    //add war cards to winning card array
-    for (var j = 0; j < 4; j++) {
-		swapDecks();
-        p1.activeCard = p1.active_deck.pop();
-		p2.activeCard = p2.active_deck.pop();
-        winnerCards.push(p1.activeCard);
-		winnerCards.push(p2.activeCard);
-    }
-
-    showCard(p1.activeCard, tieCardPlayer1);
-    showCard(p2.activeCard, tieCardPlayer2);
-	
-	if (p1.activeCard.value == p2.activeCard.value && !LessThan4Cards()) {
-		updateRoundWinner("Tie!");
-		console.log("Tie!");
-		proceed();
-	} else if (p1.activeCard.value == p2.activeCard.value && LessThan4Cards) {
-		gameOver = true;
-		Winner = (p1.active_deck.count() + p1.discarded_deck.count() > p2.active_deck.count() + p2.discarded_deck.count()) ? p1 : p2;
-		Loser = (Winner === p1) ? p2 : p1;
-	} else {
-		Winner = (p1.activeCard.value > p2.activeCard.value) ? p1 : p2;
-		Loser = (Winner === p1) ? p2 : p1;
-		
-		for(var i=0; i<winnerCards.length; i++){
-        console.log(winnerCards[i].value);
-		}
-	}
-	
-	document.getElementById("playWholeRound").style.visibility = "visible";
-	return {
-		Winner: Winner,
-		Loser: Loser,
-		gameOver: gameOver
-	}
-
-}
-
-// Moves discarded_deck to active_deck if active_deck is empty
-function swapDecks() {
-	if (p1.active_deck.count() == 0) {
-		p1.discarded_deck.shuffle();
-		p1.deckElement.style.visibility = "visible";
-				
-		while (p1.discarded_deck.count() > 0) {
-			card = p1.discarded_deck.pop();
-			p1.active_deck.add(card);
-		}
-	}
-			
-	if (p2.active_deck.count() == 0) {
-		p2.discarded_deck.shuffle();
-		p2.deckElement.style.visibility = "visible";
-				
-		while (p2.discarded_deck.count() > 0) {
-			card = p2.discarded_deck.pop();
-			p2.active_deck.add(card);
-		}
-	}
-}
-
-function LessThan4Cards() {
-	var gameOver = false;
-	
-	if ((p1.discarded_deck.count() + p1.active_deck.count() < 4)  || (p2.discarded_deck.count() + p2.active_deck.count() < 4)) {
-		gameOver = true;
-	}
-	
-	return gameOver;
-}
 
 function OutOfCards() {
 	var gameOver = false; 
 	
-	if (gameRound.bothPlayedCard) {
+	if (gameRound.bothPlayedCard()) {
 		if ((p1.discarded_deck.count() + p1.active_deck.count() == 0) || (p2.discarded_deck.count() + p2.active_deck.count() == 0)) {
 			gameOver = true;
 		}
@@ -316,8 +260,12 @@ function OutOfCards() {
 	return gameOver;
 }
 
+
+
+//the main event loop
 function cardClick() {
 	
+    //Test if new round began
     if (gameRound.isNewRound) {
         updatePlayerMessage("Round: " + gameRound.count());
         p1.activeCard = null;
@@ -329,70 +277,78 @@ function cardClick() {
 	var winner = null;
 	var loser = null;
 	var gameOver = false;
-    
-    if (player.active_deck.count() > 0) {
-        var card = player.active_deck.pop();
-		if (player.active_deck.count() == 0) {
-		  player.deckElement.style.visibility = "hidden";
-		}  
-        player.activeCard = card;
-        showCard(card, player.battleField);
-        player.playedTurn = true;
-		winnerCards.push(player.activeCard);
 
-        if (gameRound.bothPlayedCard()) {
-            if (gameRound.isTie() && !LessThan4Cards()) {
-                 updateRoundWinner("Tie!");
-				 console.log("Tie!");
-                 document.getElementById("playWholeRound").style.visibility = "hidden";
-				 tie = new proceed();
-				 winner = tie.Winner;
-				 loser = tie.Loser;
-				 gameOver = tie.gameOver;
-            } else if (gameRound.isTie() && LessThan4Cards) {
-				winner = (p1.active_deck.count() + p1.discarded_deck.count() > p2.active_deck.count() + p2.discarded_deck.count()) ? p1 : p2;
-				loser = (winner === p1) ? p2 : p1;
-				gameOver = true;
-			} else {
-                winner = gameRound.whoWon();
-				loser = gameRound.whoLost();
+
+    //make sure player has at least 1 one card
+
+    player.checkDecks();
+
+    //Test if the player has enough cards to play the round... (to be addded)
+
+
+    if (player.active_deck.count() <= 0) {
+        alert("Error: Player has less zero or fewer cards.");
+        return;
+    }
+
+    var card = gameRound.getCurrentPlayerNextCard();
+	
+
+    if (player.active_deck.count() == 0) {
+	  player.deckElement.style.visibility = "hidden";
+	} 
+
+    player.activeCard = card;
+    showCard(card, player.battleField);
+    player.playedTurn = true;
+
+    //evaluate who won
+    if (gameRound.bothPlayedCard()) {
+
+        var isTie = gameRound.gameRound.isTie();
+        var isClearRoundWinner = !isTie;
+
+        if (isTie) {
+            //Need to add code for "tie breaking mode"
+
+            updateRoundWinner("Tie!");
+            console.log("Tie!");
+            document.getElementById("playWholeRound").style.visibility = "hidden";
+
+            if (gameRound.bothPlayersCanPlayForTie()) {
+               winner = gameRound.evaluateTie();        // <-------------
+               gameRound.awardCardsToWinner(winner);
+
+
+            } else {    //if not enough cards, then the won with most cards wins
+                winner = gameRound.whoWonByCardCount();
+                loser = gameRound.whoLost();
+                gameRound.awardCardsToWinner(winner);
+
+                gameOver = true;
             }
-			
-			updateRoundWinner("Winner: " + winner.id);
+
+        } //end if for tie
+
+        if (isClearRoundWinner) {
+            winner = gameRound.whoWon();
+            loser = gameRound.whoLost();
+            
             console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
-				
-			// add cards to winner's discard deck
-			while(winnerCards.length) {
-				wonCard = winnerCards.pop();
-                winner.discarded_deck.add(wonCard);
-			}
-			
-			if (OutOfCards()) {
-				gameOver = true;
-			}
-			
-			console.log(p1.id + " Count Active Deck: " + p1.active_deck.count());
-			console.log(p1.id + " Count Discard Deck: " + p1.discarded_deck.count());
-			console.log(p2.id + " Count Active Deck: " + p2.active_deck.count());
-			console.log(p2.id + " Count Discard Deck: " + p2.discarded_deck.count());
-			
-			if (gameOver) {
-				if (loser.active_deck.count() == 0) {
-					loser.deckElement.style.visibility = "hidden";
-				}
-				document.getElementById("playWholeRound").style.visibility = "hidden";
-				updatePlayerMessage("GAME OVER!");
-				return;
-			}
-
-			swapDecks();
-        } 
+            updateRoundWinner("Winner: " + winner.id);
+            winner.discarded_deck.add(winner.activeCard);
+            winner.discarded_deck.add(loser.activeCard);
+        }
+        
 		
-		gameRound.nextTurn();      
-		updateClickListeners(); 
-           
-    } 
-
+		if (OutOfCards()) {
+			gameOver = true;
+		}
+		
+    } //end if 
+	
+	gameRound.nextTurn();      
+	updateClickListeners();  
 }
 
 </script>
