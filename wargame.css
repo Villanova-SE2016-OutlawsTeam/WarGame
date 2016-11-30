@@ -79,8 +79,19 @@ td.tie_player2 {
 
 img.backface {
     visibility: hidden;
+    -webkit-box-shadow:0 0 100px yellow; 
+    -moz-box-shadow: 0 0 100px yellow; 
+    box-shadow:0 0 100px yellow;
 }
 
 img.tie_backface {
+    visibility: hidden;
+}
+
+.player2Score {
+    text-align: right;
+}
+
+img.card_spacer {
     visibility: hidden;
 }
