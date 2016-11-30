@@ -3,6 +3,7 @@ var Player = function(type, id) {
     var id = id
     var type = type
     var activeCard;
+    var activeBattleField;
     var playedTurn = false;
 
     var active_deck = new Deck()

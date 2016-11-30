@@ -454,6 +454,7 @@ function cardClick_Continued(chosen_card) {
         player = gameRound.getCurrentPlayer();
 
         if (chosen_card == "secondary") {
+            player.activeBattleField = player.battleField_secondary;
             player.discarded_deck.add(player.activeCard);   
 
             //grab a new card
@@ -468,6 +469,7 @@ function cardClick_Continued(chosen_card) {
             showCard(card, player.battleField_secondary);
             showCardBackFace(player.battleField_primary)
         } else {
+            player.activeBattleField = player.battleField_primary;
             var card = player.nextCardFromDeck();
             player.discarded_deck.add(card);        //add unplayed card to discarded deck
 
@@ -519,9 +521,19 @@ function cardClick_Continued(chosen_card) {
                 winner.discarded_deck.add(winner.activeCard);
                 winner.discarded_deck.add(loser.activeCard);
             }
-            
+
             updateRoundWinner("Winner: " + winner.id);
             console.log("Round " + gameRound.count() + ": Winner: " + winner.id + ", Loser: " + loser.id);
+
+            //highlight the winner's card
+            var glow_color = "red"
+            // var glow_size = "200" + "px";
+            // winner.activeBattleField.children[0].style["-webkit-box-shadow"] = "0 0  " + glow_size + " " + glow_color; 
+            // winner.activeBattleField.children[0].style["-moz-box-shadow"] = "0 0  " + glow_size + " " + glow_color; 
+            // winner.activeBattleField.children[0].style["box-shadow"] = "0 0  " + glow_size + " " + glow_color;
+            winner.activeBattleField.children[0].style["border-color"] = glow_color;
+            winner.activeBattleField.children[0].style["border-style"] = "solid";
+            winner.activeBattleField.children[0].style["border-width"] = "10px";
             
             
             if (OutOfCards()) {
