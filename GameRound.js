@@ -7,6 +7,7 @@ var GameRound = function(startingTurn, player1, player2) {
 
     var isNewRound = false;
     var winner = null;      //winner of a round
+    var gameOver = false;
 
     function resetPlayerTurns() {
         p1.playedTurn = false;
@@ -79,7 +80,8 @@ var GameRound = function(startingTurn, player1, player2) {
         bothPlayedCard: bothPlayedCard,
         isTie: isTie,
         whoWon: whoWon,
-        whoLost: whoLost
+        whoLost: whoLost,
+        gameOver: gameOver
     }
 }
 

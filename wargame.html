@@ -481,7 +481,6 @@ function cardClick_Continued(chosen_card) {
         var player = gameRound.getCurrentPlayer();
         var winner = null;
         var loser = null;
-        var gameOver = false;
 
         player.playedTurn = true;
 
@@ -499,12 +498,12 @@ function cardClick_Continued(chosen_card) {
                     
                     winner = tie.Winner;
                     loser = tie.Loser;
-                    gameOver = tie.gameOver;
+                    gameRound.gameOver = tie.gameOver;
                 } else {
                     // proceed to handle tie
                     winner = (p1.active_deck.count() + p1.discarded_deck.count() > p2.active_deck.count() + p2.discarded_deck.count()) ? p1 : p2;
                     loser = (winner === p1) ? p2 : p1;
-                    gameOver = true;
+                    gameRound.gameOver = true;
                 }
             
                 //you can only win multiple cards if you win a tie
@@ -533,7 +532,7 @@ function cardClick_Continued(chosen_card) {
             
             
             if (OutOfCards()) {
-                gameOver = true;
+                gameRound.gameOver = true;
             }
             
             console.log(p1.id + " Count Active Deck: " + p1.active_deck.count());
@@ -543,7 +542,7 @@ function cardClick_Continued(chosen_card) {
             console.log(p2.id + " Count Discard Deck: " + p2.discarded_deck.count());
             updateScores();
             
-            if (gameOver) {
+            if (gameRound.gameOver) {
                 if (loser.active_deck.count() == 0) {
                     loser.deckElement.style.visibility = "hidden";
                 }
