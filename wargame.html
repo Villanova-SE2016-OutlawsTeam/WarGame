@@ -463,13 +463,14 @@ function cardClick_Continued(chosen_card) {
               player.deckElement.style.visibility = "hidden";
             }  
             
-            player.battleField_primary.style.visibility = "hidden";
+            // player.battleField_primary.style.visibility = "hidden";
             showCard(card, player.battleField_secondary);
+            showCardBackFace(player.battleField_primary)
         } else {
             var card = player.nextCardFromDeck();
             player.discarded_deck.add(card);        //add unplayed card to discarded deck
 
-            player.battleField_secondary.style.visibility = "hidden";        
+                    
         }
 
         //remove listeners before continuing the round
