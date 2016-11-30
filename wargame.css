@@ -87,3 +87,11 @@ img.backface {
 img.tie_backface {
     visibility: hidden;
 }
+
+.player2Score {
+    text-align: right;
+}
+
+img.card_spacer {
+    visibility: hidden;
+}

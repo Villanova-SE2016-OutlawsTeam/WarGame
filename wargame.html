@@ -39,6 +39,7 @@
     	<tr>
     		<th colspan=2 class="left" id="player1Score">Player 1</th>
             <th></th>		
+            <th></th>
             <th></th>       
     		<th colspan=2 class="right" id="player2Score">Player 2</th>
     	</tr>
@@ -49,13 +50,13 @@
                  <img id="player1" src="card_images/backface.png" class="backface">
             </td>
     		
-    		<td id="battlefield1_secondary" class="secondary"></td>
-            <td id="battlefield1_primary" class="primary"></td>
+    		<td id="battlefield1_secondary" class="secondary"><img src="card_images/backface.png" class="card_spacer"></td>
+            <td id="battlefield1_primary" class="primary"><img src="card_images/backface.png" class="card_spacer"></td></td>
     		
     		<td id="nomansland"></td>
     		
-    		<td id="battlefield2_primary" class="primary"></td>
-            <td id="battlefield2_secondary" class="secondary"></td>
+    		<td id="battlefield2_primary" class="primary"><img src="card_images/backface.png" class="card_spacer"></td></td>
+            <td id="battlefield2_secondary" class="secondary"><img src="card_images/backface.png" class="card_spacer"></td></td>
 
     		
             <td>
@@ -436,7 +437,7 @@ function cardClick(optional_card_choice) {
         player.battleField_secondary.addEventListener("click", cardClick_decideOnCardToPlay);
 
     //this is for the 'play whole round' button
-    if (typeof optional_card_choice != "undefined") {
+    if (typeof optional_card_choice != "object") {
         cardClick_Continued(optional_card_choice);
     }
 }
