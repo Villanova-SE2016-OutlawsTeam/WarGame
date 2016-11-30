@@ -45,6 +45,14 @@ var Player = function(type, id) {
         return active_deck.count() + discarded_deck.count();
     }
 
+    function hasEnoughToPlayRound() {
+        return totalCardCount() >= gameConstants.MIN_CARDS_REQUIRED_PER_ROUND;
+    }
+
+    function hasEnoughToPlayTie() {
+        return totalCardCount() >= gameConstants.MIN_CARDS_RQUIRED_FOR_TIE;
+    }
+
     return {
         id: id,
         type: type,
@@ -54,6 +62,8 @@ var Player = function(type, id) {
         activeCard: activeCard,
         playedTurn: playedTurn,
         nextCardFromDeck: nextCardFromDeck,
-        totalCardCount: totalCardCount
+        totalCardCount: totalCardCount,
+        hasEnoughToPlayRound: hasEnoughToPlayRound,
+        hasEnoughToPlayTie: hasEnoughToPlayTie
     }
 }
