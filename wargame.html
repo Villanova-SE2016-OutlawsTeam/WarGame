@@ -46,7 +46,7 @@
 
         <!-- The first row of cards -->
         <tr>
-            <td>
+            <td class = "col1">
                  <img id="player1" src="card_images/backface.png" class="backface">
             </td>
     		
@@ -59,7 +59,7 @@
             <td id="battlefield2_secondary" class="secondary"><img src="card_images/backface.png" class="card_spacer"></td></td>
 
     		
-            <td>
+            <td class = "col5">
                 <img id="player2" src="card_images/backface.png" class="backface">
             </td>
         </tr>   
@@ -209,7 +209,7 @@ function showCardBackFace(destElem) {
 function clearCardsFromBattleField() {
 	// removes extra rows from tieTable if applicable
 	while (document.getElementById("tieTable").rows.length > 1) {
-		document.getElementById("tieTable").deleteRow(0);
+		document.getElementById("tieTable").deleteRow(-1);
 	}
 	
 	tieCardPlayer1 = document.getElementById("player1_downcard4");
@@ -271,10 +271,11 @@ function playWholeRound() {
 }
 
 function addRow() {
+	var lastRow = document.getElementById("tieTable").rows.length;
     console.log("add row");
-/* Inserts a row into the tieTable */
+	/* Inserts a row into the tieTable at the bottom */
 	var table = document.getElementById("tieTable");
-	var newRow = table.insertRow(0);
+	var newRow = table.insertRow(-1);
 	
 	// Create new cells for the row
 	var cell1 = newRow.insertCell(0);
@@ -315,8 +316,8 @@ function addRow() {
 	cell9.innerHTML = '<img id="player2_downcard3" src="card_images/backface.png" class="tie_backface">'
 	
 	// new location for the face up cards
-	tieCardPlayer1 = document.getElementById("tieTable").getElementsByTagName('tr')[0].getElementsByTagName('td')[3];
-	tieCardPlayer2 = document.getElementById("tieTable").getElementsByTagName('tr')[0].getElementsByTagName('td')[5];
+	tieCardPlayer1 = document.getElementById("tieTable").getElementsByTagName('tr')[lastRow].getElementsByTagName('td')[3];
+	tieCardPlayer2 = document.getElementById("tieTable").getElementsByTagName('tr')[lastRow].getElementsByTagName('td')[5];
 }
 
 var tieBreaker = function() {
@@ -349,15 +350,18 @@ var tieBreaker = function() {
 		updateRoundWinner("Tie!");
 		console.log("Tie!");
 		
+		// handle nested tie if each player has enough cards
 		if (!LessThan4Cards()) {
 			addRow();
 			tieBreaker();
 		} else {
+			//game over
 			gameOver = true;
 			Winner = (p1.active_deck.count() + p1.discarded_deck.count() > p2.active_deck.count() + p2.discarded_deck.count()) ? p1 : p2;
 			Loser = (Winner === p1) ? p2 : p1;
 		}
 	} else {
+		//return tie winner
 		Winner = (p1.activeCard.value > p2.activeCard.value) ? p1 : p2;
 		Loser = (Winner === p1) ? p2 : p1;
 		
@@ -380,7 +384,7 @@ function LessThan4Cards() {
     // console.log("less than four");
 	var gameOver = false;
 	
-	if ((p1.discarded_deck.count() + p1.active_deck.count() < 4)  || (p2.discarded_deck.count() + p2.active_deck.count() < 4)) {
+	if ((p1.totalCardCount < 4)  || (p2.totalCardCount < 4)) {
 		gameOver = true;
 	}
 	
@@ -393,7 +397,7 @@ function OutOfCards() {
 	var gameOver = false; 
 	
 	if (gameRound.bothPlayedCard) {
-		if ((p1.discarded_deck.count() + p1.active_deck.count() == 0) || (p2.discarded_deck.count() + p2.active_deck.count() == 0)) {
+		if ((p1.totalCardCount) < 1 || (p2.totalCardCount < 1)) {
 			gameOver = true;
 		}
 	}
@@ -490,10 +494,10 @@ function cardClick_Continued(chosen_card) {
             if (gameRound.isTie()) {
                 updateRoundWinner("Tie!");
                 console.log("Tie!");
-                
+                console.log("Player 1 card count before tie: " + p1.totalCardCount);
+				console.log("Player 2 card count before tie: " + p2.totalCardCount);
                 if (!LessThan4Cards()) {
-                    console.log("found less than four cards!!!")
-                    // game over
+					// proceed to handle tie
                     document.getElementById("playWholeRound").style.visibility = "hidden";
                     tie = new tieBreaker();
                     
@@ -501,7 +505,8 @@ function cardClick_Continued(chosen_card) {
                     loser = tie.Loser;
                     gameOver = tie.gameOver;
                 } else {
-                    // proceed to handle tie
+                    console.log("found less than four cards!!!")
+                    // game over
                     winner = (p1.active_deck.count() + p1.discarded_deck.count() > p2.active_deck.count() + p2.discarded_deck.count()) ? p1 : p2;
                     loser = (winner === p1) ? p2 : p1;
                     gameOver = true;
