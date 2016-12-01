@@ -69,6 +69,16 @@ var GameRound = function(startingTurn, player1, player2) {
         console.log("Round: " + roundCount + ", Turn: " + currentTurn);
     }
 
+    function isGameOver() {
+        var eitherPlayerOutOfCards = p1.isOutOfCards() || p2.isOutOfCards(); 
+
+        if (eitherPlayerOutOfCards) {
+            gameOver = true;
+        }
+
+        return gameOver;
+    }
+
     return {
         nextTurn: nextTurn,
         whoseTurn: whoseTurn,
@@ -81,7 +91,8 @@ var GameRound = function(startingTurn, player1, player2) {
         isTie: isTie,
         whoWon: whoWon,
         whoLost: whoLost,
-        gameOver: gameOver
+        gameOver: gameOver,
+        isGameOver: isGameOver
     }
 }
 

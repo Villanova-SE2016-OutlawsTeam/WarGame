@@ -11,8 +11,10 @@ var GameConstants = function() {
     var ROUNDWINNER = "roundWinner"
 	var P1SCORE = "player1Score"
     var P2SCORE = "player2Score"
-    var MIN_CARDS_REQUIRED_PER_ROUND = 2;
-    var MIN_CARDS_RQUIRED_FOR_TIE = 4; 
+    var NUM_CARD_PER_ROUND = 2;
+    var NUM_CARDS_PER_TIE = 4; 
+    var PLAYED = "played";
+    var NOT_PLAYED = "notPlayed";
 	
     return {
         HUMAN: HUMAN,
@@ -25,6 +27,9 @@ var GameConstants = function() {
         ROUNDWINNER: ROUNDWINNER,
 		P1SCORE: P1SCORE,
 		P2SCORE: P2SCORE,
-        MIN_CARDS_REQUIRED_PER_ROUND: MIN_CARDS_REQUIRED_PER_ROUND
+        NUM_CARD_PER_ROUND: NUM_CARD_PER_ROUND,
+        NUM_CARDS_PER_TIE: NUM_CARDS_PER_TIE,
+        PLAYED: PLAYED,
+        NOT_PLAYED: NOT_PLAYED
     }
 }();
